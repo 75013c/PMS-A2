@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Inventory Management System</h1>
+      <p class="subtitle">TypeScript Standalone App</p>
+    </header>
+
+    <section class="card">
+      <h2>Item Form</h2>
+
+      <div id="messageBox" class="message" aria-live="polite"></div>
+
+      <form id="itemForm">
+        <div class="grid">
+          <div class="field">
+            <label for="itemId">Item ID *</label>
+            <input type="text" id="itemId" maxlength="20" />
+          </div>
+
+          <div class="field">
+            <label for="itemName">Item Name *</label>
+            <input type="text" id="itemName" maxlength="60" />
+          </div>
+
+          <div class="field">
+            <label for="category">Category *</label>
+            <select id="category">
+              <option value="">Select Category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Tools">Tools</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="quantity">Quantity *</label>
+            <input type="number" id="quantity" min="0" />
+          </div>
+
+          <div class="field">
+            <label for="price">Price *</label>
+            <input type="number" id="price" min="0" step="0.01" />
+          </div>
+
+          <div class="field">
+            <label for="supplierName">Supplier Name *</label>
+            <input type="text" id="supplierName" maxlength="60" />
+          </div>
+
+          <div class="field">
+            <label for="stockStatus">Stock Status *</label>
+            <select id="stockStatus">
+              <option value="">Select Stock Status</option>
+              <option value="In Stock">In Stock</option>
+              <option value="Low Stock">Low Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="popularItem">Popular Item *</label>
+            <select id="popularItem">
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="field full-width">
+            <label for="comment">Comment on Item</label>
+            <textarea id="comment" rows="3" maxlength="200"></textarea>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button type="button" id="addBtn">Add Item</button>
+          <button type="button" id="editBtn">Load Item for Edit</button>
+          <button type="button" id="updateBtn">Update by Item Name</button>
+          <button type="button" id="deleteBtn" class="danger">Delete by Item Name</button>
+          <button type="button" id="clearBtn" class="secondary">Clear Form</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Search & Display</h2>
+
+      <div class="grid search-grid">
+        <div class="field">
+          <label for="searchName">Search by Item Name</label>
+          <input type="text" id="searchName" maxlength="60" />
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button type="button" id="searchBtn">Search</button>
+        <button type="button" id="showAllBtn" class="secondary">Display All Items</button>
+        <button type="button" id="showPopularBtn" class="secondary">Display Popular Items</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Inventory Records</h2>
+      <div id="resultsInfo" class="results-info"></div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Item ID</th>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Supplier</th>
+              <th>Stock Status</th>
+              <th>Popular</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="confirmBox" class="card hidden">
+      <h2>Confirmation</h2>
+      <div id="confirmText"></div>
+      <div class="button-row top-gap">
+        <button type="button" id="confirmYesBtn" class="danger">Yes, Delete</button>
+        <button type="button" id="confirmNoBtn" class="secondary">Cancel</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
