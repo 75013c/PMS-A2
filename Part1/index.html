@@ -3,132 +3,223 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventory Management System</title>
+  <title>Item Management</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-page="management">
   <div class="container">
     <header>
       <h1>Inventory Management System</h1>
-      <p class="subtitle">TypeScript Standalone App</p>
     </header>
+  </div>
+
+
+
+  <nav class="navbar">
+    <a href="index.html" class="active">Item Management</a>
+    <a href="search.html">Search Items</a>
+    <a href="inventory.html">Inventory Display</a>
+  </nav>
+
+
+
+  <div class="container">
+
+
+
 
     <section class="card">
-      <h2>Item Form</h2>
+      <h2>Choose an Action</h2>
+      <p class="section-note">Use the options below to add a new item, update item details, or remove an item from the inventory.</p>
 
+      <div class="action-grid">
+        <button type="button" id="showAddPanelBtn" class="action-btn active-action">Add Item</button>
+        <button type="button" id="showUpdatePanelBtn" class="action-btn">Update Item</button>
+        <button type="button" id="showDeletePanelBtn" class="action-btn danger-action">Delete Item</button>
+      </div>
+    </section>
+
+    <section class="card hidden" id="formCard">
       <div id="messageBox" class="message" aria-live="polite"></div>
 
-      <form id="itemForm">
-        <div class="grid">
-          <div class="field">
-            <label for="itemId">Item ID *</label>
-            <input type="text" id="itemId" maxlength="20" />
+      <!-- Add Panel -->
+      <div id="addPanel" class="panel hidden">
+        <h2>Add New Item</h2>
+        <form id="addForm">
+          <div class="grid">
+            <div class="field">
+              <label for="addItemId">Item ID *</label>
+              <input type="text" id="addItemId" maxlength="20" />
+            </div>
+
+            <div class="field">
+              <label for="addItemName">Item Name *</label>
+              <input type="text" id="addItemName" maxlength="60" />
+            </div>
+
+            <div class="field">
+              <label for="addCategory">Category *</label>
+              <select id="addCategory">
+                <option value="">Select Category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Tools">Tools</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="addQuantity">Quantity *</label>
+              <input type="number" id="addQuantity" min="0" />
+            </div>
+
+            <div class="field">
+              <label for="addPrice">Price *</label>
+              <input type="number" id="addPrice" min="0" step="0.01" />
+            </div>
+
+            <div class="field">
+              <label for="addSupplierName">Supplier Name *</label>
+              <input type="text" id="addSupplierName" maxlength="60" />
+            </div>
+
+            <div class="field">
+              <label for="addStockStatus">Stock Status *</label>
+              <select id="addStockStatus">
+                <option value="">Select Stock Status</option>
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="addPopularItem">Popular Item *</label>
+              <select id="addPopularItem">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+
+            <div class="field full-width">
+              <label for="addComment">Comment on Item</label>
+              <textarea id="addComment" rows="3" maxlength="200"></textarea>
+            </div>
           </div>
 
-          <div class="field">
-            <label for="itemName">Item Name *</label>
-            <input type="text" id="itemName" maxlength="60" />
+          <div class="button-row">
+            <button type="button" id="addBtn">Save New Item</button>
+            <button type="button" id="clearAddBtn" class="secondary">Clear Form</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Update Panel -->
+      <div id="updatePanel" class="panel hidden">
+        <h2>Update Item</h2>
+
+        <div class="lookup-box">
+          <div class="grid search-grid">
+            <div class="field">
+              <label for="loadItemName">Enter Item Name to Load *</label>
+              <input type="text" id="loadItemName" maxlength="60" />
+            </div>
           </div>
 
-          <div class="field">
-            <label for="category">Category *</label>
-            <select id="category">
-              <option value="">Select Category</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Tools">Tools</option>
-              <option value="Miscellaneous">Miscellaneous</option>
-            </select>
+          <div class="button-row">
+            <button type="button" id="editBtn">Load Item for Edit</button>
+          </div>
+        </div>
+
+        <form id="updateForm">
+          <div class="grid">
+            <div class="field">
+              <label for="updateItemId">Item ID *</label>
+              <input type="text" id="updateItemId" maxlength="20" readonly />
+            </div>
+
+            <div class="field">
+              <label for="updateItemName">Item Name *</label>
+              <input type="text" id="updateItemName" maxlength="60" />
+            </div>
+
+            <div class="field">
+              <label for="updateCategory">Category *</label>
+              <select id="updateCategory">
+                <option value="">Select Category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Tools">Tools</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="updateQuantity">Quantity *</label>
+              <input type="number" id="updateQuantity" min="0" />
+            </div>
+
+            <div class="field">
+              <label for="updatePrice">Price *</label>
+              <input type="number" id="updatePrice" min="0" step="0.01" />
+            </div>
+
+            <div class="field">
+              <label for="updateSupplierName">Supplier Name *</label>
+              <input type="text" id="updateSupplierName" maxlength="60" />
+            </div>
+
+            <div class="field">
+              <label for="updateStockStatus">Stock Status *</label>
+              <select id="updateStockStatus">
+                <option value="">Select Stock Status</option>
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="updatePopularItem">Popular Item *</label>
+              <select id="updatePopularItem">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+
+            <div class="field full-width">
+              <label for="updateComment">Comment on Item</label>
+              <textarea id="updateComment" rows="3" maxlength="200"></textarea>
+            </div>
           </div>
 
-          <div class="field">
-            <label for="quantity">Quantity *</label>
-            <input type="number" id="quantity" min="0" />
+          <div class="button-row">
+            <button type="button" id="updateBtn">Update Item</button>
+            <button type="button" id="clearUpdateBtn" class="secondary">Clear Form</button>
           </div>
+        </form>
+      </div>
 
+      <!-- Delete Panel -->
+      <div id="deletePanel" class="panel hidden">
+        <h2>Delete Item</h2>
+        <p class="section-note">Enter the item name and confirm deletion.</p>
+
+        <div class="grid search-grid">
           <div class="field">
-            <label for="price">Price *</label>
-            <input type="number" id="price" min="0" step="0.01" />
-          </div>
-
-          <div class="field">
-            <label for="supplierName">Supplier Name *</label>
-            <input type="text" id="supplierName" maxlength="60" />
-          </div>
-
-          <div class="field">
-            <label for="stockStatus">Stock Status *</label>
-            <select id="stockStatus">
-              <option value="">Select Stock Status</option>
-              <option value="In Stock">In Stock</option>
-              <option value="Low Stock">Low Stock</option>
-              <option value="Out of Stock">Out of Stock</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="popularItem">Popular Item *</label>
-            <select id="popularItem">
-              <option value="">Select</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-
-          <div class="field full-width">
-            <label for="comment">Comment on Item</label>
-            <textarea id="comment" rows="3" maxlength="200"></textarea>
+            <label for="deleteItemName">Item Name *</label>
+            <input type="text" id="deleteItemName" maxlength="60" />
           </div>
         </div>
 
         <div class="button-row">
-          <button type="button" id="addBtn">Add Item</button>
-          <button type="button" id="editBtn">Load Item for Edit</button>
-          <button type="button" id="updateBtn">Update by Item Name</button>
           <button type="button" id="deleteBtn" class="danger">Delete by Item Name</button>
-          <button type="button" id="clearBtn" class="secondary">Clear Form</button>
+          <button type="button" id="clearDeleteBtn" class="secondary">Clear</button>
         </div>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2>Search & Display</h2>
-
-      <div class="grid search-grid">
-        <div class="field">
-          <label for="searchName">Search by Item Name</label>
-          <input type="text" id="searchName" maxlength="60" />
-        </div>
-      </div>
-
-      <div class="button-row">
-        <button type="button" id="searchBtn">Search</button>
-        <button type="button" id="showAllBtn" class="secondary">Display All Items</button>
-        <button type="button" id="showPopularBtn" class="secondary">Display Popular Items</button>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Inventory Records</h2>
-      <div id="resultsInfo" class="results-info"></div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Item ID</th>
-              <th>Item Name</th>
-              <th>Category</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Supplier</th>
-              <th>Stock Status</th>
-              <th>Popular</th>
-              <th>Comment</th>
-            </tr>
-          </thead>
-          <tbody id="inventoryTableBody"></tbody>
-        </table>
       </div>
     </section>
 

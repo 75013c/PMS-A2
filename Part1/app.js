@@ -1,11 +1,7 @@
 "use strict";
-// ============================
-// Type Definitions
-// ============================
-// ============================
-// Inventory Data
-// ============================
-const inventory = [
+var _a;
+const STORAGE_KEY = "inventory_session_data";
+const defaultInventory = [
     {
         itemId: "E1001",
         itemName: "Smart TV",
@@ -29,103 +25,29 @@ const inventory = [
         comment: "Ergonomic design"
     }
 ];
-// ============================
-// DOM References
-// ============================
-const itemIdInput = document.getElementById("itemId");
-const itemNameInput = document.getElementById("itemName");
-const categoryInput = document.getElementById("category");
-const quantityInput = document.getElementById("quantity");
-const priceInput = document.getElementById("price");
-const supplierNameInput = document.getElementById("supplierName");
-const stockStatusInput = document.getElementById("stockStatus");
-const popularItemInput = document.getElementById("popularItem");
-const commentInput = document.getElementById("comment");
-const searchNameInput = document.getElementById("searchName");
-const messageBox = document.getElementById("messageBox");
-const inventoryTableBody = document.getElementById("inventoryTableBody");
-const resultsInfo = document.getElementById("resultsInfo");
-const addBtn = document.getElementById("addBtn");
-const editBtn = document.getElementById("editBtn");
-const updateBtn = document.getElementById("updateBtn");
-const deleteBtn = document.getElementById("deleteBtn");
-const clearBtn = document.getElementById("clearBtn");
-const searchBtn = document.getElementById("searchBtn");
-const showAllBtn = document.getElementById("showAllBtn");
-const showPopularBtn = document.getElementById("showPopularBtn");
-const confirmBox = document.getElementById("confirmBox");
-const confirmText = document.getElementById("confirmText");
-const confirmYesBtn = document.getElementById("confirmYesBtn");
-const confirmNoBtn = document.getElementById("confirmNoBtn");
-// ============================
-// Utility Functions
-// ============================
-function showMessage(message, type) {
-    messageBox.className = `message ${type}`;
-    messageBox.innerHTML = message;
+function loadInventory() {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        return JSON.parse(saved);
+    }
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultInventory));
+    return [...defaultInventory];
 }
-function clearMessage() {
-    messageBox.className = "message";
-    messageBox.innerHTML = "";
+let inventory = loadInventory();
+let currentEditingItemName = "";
+let pendingDeleteName = "";
+// ---------- Global helpers ----------
+function saveData() {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
 }
-function normaliseName(name) {
+function normalise(name) {
     return name.trim().toLowerCase();
 }
-function getFormData() {
-    return {
-        itemId: itemIdInput.value.trim(),
-        itemName: itemNameInput.value.trim(),
-        category: categoryInput.value,
-        quantity: quantityInput.value.trim(),
-        price: priceInput.value.trim(),
-        supplierName: supplierNameInput.value.trim(),
-        stockStatus: stockStatusInput.value,
-        popularItem: popularItemInput.value,
-        comment: commentInput.value.trim()
-    };
+function findItemByName(name) {
+    return inventory.find((item) => normalise(item.itemName) === normalise(name));
 }
-function validateForm(data, isUpdate = false) {
-    const errors = [];
-    if (!isUpdate && data.itemId === "") {
-        errors.push("Item ID is required.");
-    }
-    if (data.itemName === "") {
-        errors.push("Item Name is required.");
-    }
-    if (data.category === "") {
-        errors.push("Category is required.");
-    }
-    if (data.quantity === "") {
-        errors.push("Quantity is required.");
-    }
-    else if (Number.isNaN(Number(data.quantity)) || Number(data.quantity) < 0) {
-        errors.push("Quantity must be a number greater than or equal to 0.");
-    }
-    if (data.price === "") {
-        errors.push("Price is required.");
-    }
-    else if (Number.isNaN(Number(data.price)) || Number(data.price) < 0) {
-        errors.push("Price must be a number greater than or equal to 0.");
-    }
-    if (data.supplierName === "") {
-        errors.push("Supplier Name is required.");
-    }
-    if (data.stockStatus === "") {
-        errors.push("Stock Status is required.");
-    }
-    if (data.popularItem === "") {
-        errors.push("Popular Item is required.");
-    }
-    return errors;
-}
-function isDuplicateItemId(itemId) {
-    return inventory.some((item) => item.itemId === itemId);
-}
-function findItemByName(itemName) {
-    return inventory.find((item) => normaliseName(item.itemName) === normaliseName(itemName));
-}
-function findItemIndexByName(itemName) {
-    return inventory.findIndex((item) => normaliseName(item.itemName) === normaliseName(itemName));
+function findIndexByName(name) {
+    return inventory.findIndex((item) => normalise(item.itemName) === normalise(name));
 }
 function getStockBadge(status) {
     if (status === "In Stock") {
@@ -136,38 +58,19 @@ function getStockBadge(status) {
     }
     return `<span class="badge badge-red">${status}</span>`;
 }
-function clearForm() {
-    itemIdInput.value = "";
-    itemNameInput.value = "";
-    categoryInput.value = "";
-    quantityInput.value = "";
-    priceInput.value = "";
-    supplierNameInput.value = "";
-    stockStatusInput.value = "";
-    popularItemInput.value = "";
-    commentInput.value = "";
-}
-function fillForm(item) {
-    itemIdInput.value = item.itemId;
-    itemNameInput.value = item.itemName;
-    categoryInput.value = item.category;
-    quantityInput.value = item.quantity.toString();
-    priceInput.value = item.price.toString();
-    supplierNameInput.value = item.supplierName;
-    stockStatusInput.value = item.stockStatus;
-    popularItemInput.value = item.popularItem;
-    commentInput.value = item.comment;
-}
-function renderItems(items) {
+function renderItems(items, tableBody) {
+    if (!tableBody) {
+        return;
+    }
     if (items.length === 0) {
-        inventoryTableBody.innerHTML = `
+        tableBody.innerHTML = `
       <tr>
         <td colspan="9">No items found.</td>
       </tr>
     `;
         return;
     }
-    inventoryTableBody.innerHTML = items
+    tableBody.innerHTML = items
         .map((item) => {
         return `
         <tr>
@@ -185,8 +88,140 @@ function renderItems(items) {
     })
         .join("");
 }
+// ---------- Page detection ----------
+const bodyElement = document.body;
+const currentPage = (_a = bodyElement.dataset.page) !== null && _a !== void 0 ? _a : "";
+// ---------- Shared page elements ----------
+const messageBox = document.getElementById("messageBox");
+const resultsInfo = document.getElementById("resultsInfo");
+const inventoryTableBody = document.getElementById("inventoryTableBody");
+function showMessage(message, type) {
+    if (!messageBox) {
+        return;
+    }
+    messageBox.className = `message ${type}`;
+    messageBox.innerHTML = message;
+}
+function clearMessage() {
+    if (!messageBox) {
+        return;
+    }
+    messageBox.className = "message";
+    messageBox.innerHTML = "";
+}
 function updateResultsInfo(text) {
+    if (!resultsInfo) {
+        return;
+    }
     resultsInfo.innerHTML = text;
+}
+// ==================================================
+// MANAGEMENT PAGE
+// ==================================================
+const addPanel = document.getElementById("addPanel");
+const updatePanel = document.getElementById("updatePanel");
+const deletePanel = document.getElementById("deletePanel");
+const showAddPanelBtn = document.getElementById("showAddPanelBtn");
+const showUpdatePanelBtn = document.getElementById("showUpdatePanelBtn");
+const showDeletePanelBtn = document.getElementById("showDeletePanelBtn");
+// add inputs
+const addItemIdInput = document.getElementById("addItemId");
+const addItemNameInput = document.getElementById("addItemName");
+const addCategoryInput = document.getElementById("addCategory");
+const addQuantityInput = document.getElementById("addQuantity");
+const addPriceInput = document.getElementById("addPrice");
+const addSupplierInput = document.getElementById("addSupplierName");
+const addStockInput = document.getElementById("addStockStatus");
+const addPopularInput = document.getElementById("addPopularItem");
+const addCommentInput = document.getElementById("addComment");
+// update inputs
+const loadItemNameInput = document.getElementById("loadItemName");
+const updateItemIdInput = document.getElementById("updateItemId");
+const updateItemNameInput = document.getElementById("updateItemName");
+const updateCategoryInput = document.getElementById("updateCategory");
+const updateQuantityInput = document.getElementById("updateQuantity");
+const updatePriceInput = document.getElementById("updatePrice");
+const updateSupplierInput = document.getElementById("updateSupplierName");
+const updateStockInput = document.getElementById("updateStockStatus");
+const updatePopularInput = document.getElementById("updatePopularItem");
+const updateCommentInput = document.getElementById("updateComment");
+// delete input
+const deleteItemNameInput = document.getElementById("deleteItemName");
+// buttons
+const addBtn = document.getElementById("addBtn");
+const editBtn = document.getElementById("editBtn");
+const updateBtn = document.getElementById("updateBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+const clearAddBtn = document.getElementById("clearAddBtn");
+const clearUpdateBtn = document.getElementById("clearUpdateBtn");
+const clearDeleteBtn = document.getElementById("clearDeleteBtn");
+// confirmation
+const confirmBox = document.getElementById("confirmBox");
+const confirmText = document.getElementById("confirmText");
+const confirmYesBtn = document.getElementById("confirmYesBtn");
+const confirmNoBtn = document.getElementById("confirmNoBtn");
+const formCard = document.getElementById("formCard");
+function validateForm(data, isUpdate = false) {
+    const errors = [];
+    if (!isUpdate && data.itemId.trim() === "") {
+        errors.push("Item ID is required.");
+    }
+    if (data.itemName.trim() === "") {
+        errors.push("Item Name is required.");
+    }
+    if (data.category.trim() === "") {
+        errors.push("Category is required.");
+    }
+    if (data.quantity.trim() === "") {
+        errors.push("Quantity is required.");
+    }
+    else if (Number.isNaN(Number(data.quantity)) || Number(data.quantity) < 0) {
+        errors.push("Quantity must be a number greater than or equal to 0.");
+    }
+    if (data.price.trim() === "") {
+        errors.push("Price is required.");
+    }
+    else if (Number.isNaN(Number(data.price)) || Number(data.price) < 0) {
+        errors.push("Price must be a number greater than or equal to 0.");
+    }
+    if (data.supplierName.trim() === "") {
+        errors.push("Supplier Name is required.");
+    }
+    if (data.stockStatus.trim() === "") {
+        errors.push("Stock Status is required.");
+    }
+    if (data.popularItem.trim() === "") {
+        errors.push("Popular Item is required.");
+    }
+    return errors;
+}
+function getAddFormData() {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    return {
+        itemId: (_a = addItemIdInput === null || addItemIdInput === void 0 ? void 0 : addItemIdInput.value.trim()) !== null && _a !== void 0 ? _a : "",
+        itemName: (_b = addItemNameInput === null || addItemNameInput === void 0 ? void 0 : addItemNameInput.value.trim()) !== null && _b !== void 0 ? _b : "",
+        category: (_c = addCategoryInput === null || addCategoryInput === void 0 ? void 0 : addCategoryInput.value) !== null && _c !== void 0 ? _c : "",
+        quantity: (_d = addQuantityInput === null || addQuantityInput === void 0 ? void 0 : addQuantityInput.value.trim()) !== null && _d !== void 0 ? _d : "",
+        price: (_e = addPriceInput === null || addPriceInput === void 0 ? void 0 : addPriceInput.value.trim()) !== null && _e !== void 0 ? _e : "",
+        supplierName: (_f = addSupplierInput === null || addSupplierInput === void 0 ? void 0 : addSupplierInput.value.trim()) !== null && _f !== void 0 ? _f : "",
+        stockStatus: (_g = addStockInput === null || addStockInput === void 0 ? void 0 : addStockInput.value) !== null && _g !== void 0 ? _g : "",
+        popularItem: (_h = addPopularInput === null || addPopularInput === void 0 ? void 0 : addPopularInput.value) !== null && _h !== void 0 ? _h : "",
+        comment: (_j = addCommentInput === null || addCommentInput === void 0 ? void 0 : addCommentInput.value.trim()) !== null && _j !== void 0 ? _j : ""
+    };
+}
+function getUpdateFormData() {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    return {
+        itemId: (_a = updateItemIdInput === null || updateItemIdInput === void 0 ? void 0 : updateItemIdInput.value.trim()) !== null && _a !== void 0 ? _a : "",
+        itemName: (_b = updateItemNameInput === null || updateItemNameInput === void 0 ? void 0 : updateItemNameInput.value.trim()) !== null && _b !== void 0 ? _b : "",
+        category: (_c = updateCategoryInput === null || updateCategoryInput === void 0 ? void 0 : updateCategoryInput.value) !== null && _c !== void 0 ? _c : "",
+        quantity: (_d = updateQuantityInput === null || updateQuantityInput === void 0 ? void 0 : updateQuantityInput.value.trim()) !== null && _d !== void 0 ? _d : "",
+        price: (_e = updatePriceInput === null || updatePriceInput === void 0 ? void 0 : updatePriceInput.value.trim()) !== null && _e !== void 0 ? _e : "",
+        supplierName: (_f = updateSupplierInput === null || updateSupplierInput === void 0 ? void 0 : updateSupplierInput.value.trim()) !== null && _f !== void 0 ? _f : "",
+        stockStatus: (_g = updateStockInput === null || updateStockInput === void 0 ? void 0 : updateStockInput.value) !== null && _g !== void 0 ? _g : "",
+        popularItem: (_h = updatePopularInput === null || updatePopularInput === void 0 ? void 0 : updatePopularInput.value) !== null && _h !== void 0 ? _h : "",
+        comment: (_j = updateCommentInput === null || updateCommentInput === void 0 ? void 0 : updateCommentInput.value.trim()) !== null && _j !== void 0 ? _j : ""
+    };
 }
 function toInventoryItem(data, existingId) {
     return {
@@ -201,18 +236,85 @@ function toInventoryItem(data, existingId) {
         comment: data.comment
     };
 }
-// ============================
-// CRUD Functions
-// ============================
+function clearAddForm() {
+    if (addItemIdInput)
+        addItemIdInput.value = "";
+    if (addItemNameInput)
+        addItemNameInput.value = "";
+    if (addCategoryInput)
+        addCategoryInput.value = "";
+    if (addQuantityInput)
+        addQuantityInput.value = "";
+    if (addPriceInput)
+        addPriceInput.value = "";
+    if (addSupplierInput)
+        addSupplierInput.value = "";
+    if (addStockInput)
+        addStockInput.value = "";
+    if (addPopularInput)
+        addPopularInput.value = "";
+    if (addCommentInput)
+        addCommentInput.value = "";
+}
+function clearUpdateForm() {
+    if (loadItemNameInput)
+        loadItemNameInput.value = "";
+    if (updateItemIdInput)
+        updateItemIdInput.value = "";
+    if (updateItemNameInput)
+        updateItemNameInput.value = "";
+    if (updateCategoryInput)
+        updateCategoryInput.value = "";
+    if (updateQuantityInput)
+        updateQuantityInput.value = "";
+    if (updatePriceInput)
+        updatePriceInput.value = "";
+    if (updateSupplierInput)
+        updateSupplierInput.value = "";
+    if (updateStockInput)
+        updateStockInput.value = "";
+    if (updatePopularInput)
+        updatePopularInput.value = "";
+    if (updateCommentInput)
+        updateCommentInput.value = "";
+    currentEditingItemName = "";
+}
+function clearDeleteForm() {
+    if (deleteItemNameInput) {
+        deleteItemNameInput.value = "";
+    }
+}
+function setPanel(type) {
+    addPanel === null || addPanel === void 0 ? void 0 : addPanel.classList.add("hidden");
+    updatePanel === null || updatePanel === void 0 ? void 0 : updatePanel.classList.add("hidden");
+    deletePanel === null || deletePanel === void 0 ? void 0 : deletePanel.classList.add("hidden");
+    showAddPanelBtn === null || showAddPanelBtn === void 0 ? void 0 : showAddPanelBtn.classList.remove("active-action");
+    showUpdatePanelBtn === null || showUpdatePanelBtn === void 0 ? void 0 : showUpdatePanelBtn.classList.remove("active-action");
+    showDeletePanelBtn === null || showDeletePanelBtn === void 0 ? void 0 : showDeletePanelBtn.classList.remove("active-action");
+    formCard === null || formCard === void 0 ? void 0 : formCard.classList.remove("hidden");
+    if (type === "add") {
+        addPanel === null || addPanel === void 0 ? void 0 : addPanel.classList.remove("hidden");
+        showAddPanelBtn === null || showAddPanelBtn === void 0 ? void 0 : showAddPanelBtn.classList.add("active-action");
+    }
+    else if (type === "update") {
+        updatePanel === null || updatePanel === void 0 ? void 0 : updatePanel.classList.remove("hidden");
+        showUpdatePanelBtn === null || showUpdatePanelBtn === void 0 ? void 0 : showUpdatePanelBtn.classList.add("active-action");
+    }
+    else {
+        deletePanel === null || deletePanel === void 0 ? void 0 : deletePanel.classList.remove("hidden");
+        showDeletePanelBtn === null || showDeletePanelBtn === void 0 ? void 0 : showDeletePanelBtn.classList.add("active-action");
+    }
+    clearMessage();
+}
 function addItem() {
     clearMessage();
-    const data = getFormData();
+    const data = getAddFormData();
     const errors = validateForm(data);
     if (errors.length > 0) {
         showMessage(errors.join("<br>"), "error");
         return;
     }
-    if (isDuplicateItemId(data.itemId)) {
+    if (inventory.some((item) => item.itemId === data.itemId)) {
         showMessage("Item ID must be unique. This Item ID already exists.", "error");
         return;
     }
@@ -220,93 +322,156 @@ function addItem() {
         showMessage("Item Name already exists. Please use a different Item Name.", "error");
         return;
     }
-    const newItem = toInventoryItem(data);
-    inventory.push(newItem);
-    showMessage(`Item <strong>${newItem.itemName}</strong> added successfully.`, "success");
-    clearForm();
-    renderItems(inventory);
-    updateResultsInfo(`Displaying ${inventory.length} item(s).`);
+    inventory.push(toInventoryItem(data));
+    saveData();
+    clearAddForm();
+    showMessage(`Item <strong>${data.itemName}</strong> added successfully.`, "success");
 }
-function loadItemForEdit() {
+function loadItem() {
+    var _a;
     clearMessage();
-    const itemName = itemNameInput.value.trim();
-    if (itemName === "") {
-        showMessage("Enter the Item Name in the form first to load it for editing.", "error");
+    const name = (_a = loadItemNameInput === null || loadItemNameInput === void 0 ? void 0 : loadItemNameInput.value.trim()) !== null && _a !== void 0 ? _a : "";
+    if (name === "") {
+        showMessage("Enter the Item Name first to load it for editing.", "error");
         return;
     }
-    const item = findItemByName(itemName);
+    const item = findItemByName(name);
     if (!item) {
-        showMessage(`No item found with name <strong>${itemName}</strong>.`, "error");
+        showMessage("Item not found.", "error");
         return;
     }
-    fillForm(item);
-    showMessage(`Item <strong>${item.itemName}</strong> loaded into the form for editing.`, "info");
+    currentEditingItemName = item.itemName;
+    if (updateItemIdInput)
+        updateItemIdInput.value = item.itemId;
+    if (updateItemNameInput)
+        updateItemNameInput.value = item.itemName;
+    if (updateCategoryInput)
+        updateCategoryInput.value = item.category;
+    if (updateQuantityInput)
+        updateQuantityInput.value = item.quantity.toString();
+    if (updatePriceInput)
+        updatePriceInput.value = item.price.toString();
+    if (updateSupplierInput)
+        updateSupplierInput.value = item.supplierName;
+    if (updateStockInput)
+        updateStockInput.value = item.stockStatus;
+    if (updatePopularInput)
+        updatePopularInput.value = item.popularItem;
+    if (updateCommentInput)
+        updateCommentInput.value = item.comment;
+    showMessage(`Item <strong>${item.itemName}</strong> loaded for editing.`, "info");
 }
-function updateItemByName() {
+function updateItem() {
     clearMessage();
-    const data = getFormData();
+    if (currentEditingItemName === "") {
+        showMessage("Load item first.", "error");
+        return;
+    }
+    const data = getUpdateFormData();
     const errors = validateForm(data, true);
     if (errors.length > 0) {
         showMessage(errors.join("<br>"), "error");
         return;
     }
-    const targetIndex = findItemIndexByName(data.itemName);
-    if (targetIndex === -1) {
-        showMessage(`Cannot update. No item found with name <strong>${data.itemName}</strong>.`, "error");
+    const index = findIndexByName(currentEditingItemName);
+    if (index === -1) {
+        showMessage("Original item could not be found.", "error");
         return;
     }
-    const existingId = inventory[targetIndex].itemId;
-    inventory[targetIndex] = toInventoryItem(data, existingId);
-    showMessage(`Item <strong>${data.itemName}</strong> updated successfully.`, "success");
-    renderItems(inventory);
-    updateResultsInfo(`Displaying ${inventory.length} item(s).`);
+    const duplicateNameIndex = inventory.findIndex((item) => normalise(item.itemName) === normalise(data.itemName) &&
+        normalise(item.itemName) !== normalise(currentEditingItemName));
+    if (duplicateNameIndex !== -1) {
+        showMessage("Another item already uses this Item Name.", "error");
+        return;
+    }
+    const existingId = inventory[index].itemId;
+    inventory[index] = toInventoryItem(data, existingId);
+    currentEditingItemName = inventory[index].itemName;
+    saveData();
+    showMessage(`Item <strong>${inventory[index].itemName}</strong> updated successfully.`, "success");
 }
-let pendingDeleteName = "";
-function requestDeleteItemByName() {
+function requestDelete() {
+    var _a;
     clearMessage();
-    const nameToDelete = itemNameInput.value.trim();
-    if (nameToDelete === "") {
-        showMessage("Enter the Item Name in the form to delete an item.", "error");
+    const name = (_a = deleteItemNameInput === null || deleteItemNameInput === void 0 ? void 0 : deleteItemNameInput.value.trim()) !== null && _a !== void 0 ? _a : "";
+    if (name === "") {
+        showMessage("Enter the Item Name to delete an item.", "error");
         return;
     }
-    const item = findItemByName(nameToDelete);
+    const item = findItemByName(name);
     if (!item) {
-        showMessage(`No item found with name <strong>${nameToDelete}</strong>.`, "error");
+        showMessage("Item not found.", "error");
         return;
     }
     pendingDeleteName = item.itemName;
-    confirmText.innerHTML = `Are you sure you want to delete <strong>${item.itemName}</strong>?`;
-    confirmBox.classList.remove("hidden");
+    if (confirmText && confirmBox) {
+        confirmText.innerHTML = `Are you sure you want to delete <strong>${item.itemName}</strong>?`;
+        confirmBox.classList.remove("hidden");
+    }
 }
 function confirmDelete() {
-    const index = findItemIndexByName(pendingDeleteName);
+    const index = findIndexByName(pendingDeleteName);
     if (index === -1) {
         showMessage("Delete failed. Item could not be found.", "error");
         closeConfirmation();
         return;
     }
-    const deletedItemName = inventory[index].itemName;
+    const deletedName = inventory[index].itemName;
     inventory.splice(index, 1);
-    showMessage(`Item <strong>${deletedItemName}</strong> deleted successfully.`, "success");
+    saveData();
+    clearDeleteForm();
     closeConfirmation();
-    clearForm();
-    renderItems(inventory);
-    updateResultsInfo(`Displaying ${inventory.length} item(s).`);
+    showMessage(`Item <strong>${deletedName}</strong> deleted successfully.`, "success");
 }
 function closeConfirmation() {
     pendingDeleteName = "";
-    confirmBox.classList.add("hidden");
-    confirmText.innerHTML = "";
+    if (confirmBox) {
+        confirmBox.classList.add("hidden");
+    }
+    if (confirmText) {
+        confirmText.innerHTML = "";
+    }
 }
-function searchByName() {
+function initializeManagementPage() {
+    showAddPanelBtn === null || showAddPanelBtn === void 0 ? void 0 : showAddPanelBtn.addEventListener("click", () => setPanel("add"));
+    showUpdatePanelBtn === null || showUpdatePanelBtn === void 0 ? void 0 : showUpdatePanelBtn.addEventListener("click", () => setPanel("update"));
+    showDeletePanelBtn === null || showDeletePanelBtn === void 0 ? void 0 : showDeletePanelBtn.addEventListener("click", () => setPanel("delete"));
+    addBtn === null || addBtn === void 0 ? void 0 : addBtn.addEventListener("click", addItem);
+    editBtn === null || editBtn === void 0 ? void 0 : editBtn.addEventListener("click", loadItem);
+    updateBtn === null || updateBtn === void 0 ? void 0 : updateBtn.addEventListener("click", updateItem);
+    deleteBtn === null || deleteBtn === void 0 ? void 0 : deleteBtn.addEventListener("click", requestDelete);
+    clearAddBtn === null || clearAddBtn === void 0 ? void 0 : clearAddBtn.addEventListener("click", () => {
+        clearAddForm();
+        clearMessage();
+    });
+    clearUpdateBtn === null || clearUpdateBtn === void 0 ? void 0 : clearUpdateBtn.addEventListener("click", () => {
+        clearUpdateForm();
+        clearMessage();
+    });
+    clearDeleteBtn === null || clearDeleteBtn === void 0 ? void 0 : clearDeleteBtn.addEventListener("click", () => {
+        clearDeleteForm();
+        clearMessage();
+    });
+    confirmYesBtn === null || confirmYesBtn === void 0 ? void 0 : confirmYesBtn.addEventListener("click", confirmDelete);
+    confirmNoBtn === null || confirmNoBtn === void 0 ? void 0 : confirmNoBtn.addEventListener("click", closeConfirmation);
     clearMessage();
-    const keyword = searchNameInput.value.trim();
+}
+// ==================================================
+// SEARCH PAGE
+// ==================================================
+const searchNameInput = document.getElementById("searchName");
+const searchBtn = document.getElementById("searchBtn");
+const clearSearchBtn = document.getElementById("clearSearchBtn");
+function searchItem() {
+    var _a;
+    clearMessage();
+    const keyword = (_a = searchNameInput === null || searchNameInput === void 0 ? void 0 : searchNameInput.value.trim()) !== null && _a !== void 0 ? _a : "";
     if (keyword === "") {
         showMessage("Please enter an Item Name to search.", "error");
         return;
     }
     const results = inventory.filter((item) => item.itemName.toLowerCase().includes(keyword.toLowerCase()));
-    renderItems(results);
+    renderItems(results, inventoryTableBody);
     updateResultsInfo(`Search results: ${results.length} item(s) found for "${keyword}".`);
     if (results.length === 0) {
         showMessage(`No items matched <strong>${keyword}</strong>.`, "info");
@@ -315,38 +480,53 @@ function searchByName() {
         showMessage(`Search completed for <strong>${keyword}</strong>.`, "success");
     }
 }
+function clearSearch() {
+    if (searchNameInput) {
+        searchNameInput.value = "";
+    }
+    clearMessage();
+    renderItems([], inventoryTableBody);
+    updateResultsInfo("No search performed yet.");
+}
+function initializeSearchPage() {
+    searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", searchItem);
+    clearSearchBtn === null || clearSearchBtn === void 0 ? void 0 : clearSearchBtn.addEventListener("click", clearSearch);
+    renderItems([], inventoryTableBody);
+    updateResultsInfo("No search performed yet.");
+}
+// ==================================================
+// INVENTORY PAGE
+// ==================================================
+const showAllBtn = document.getElementById("showAllBtn");
+const showPopularBtn = document.getElementById("showPopularBtn");
 function showAllItems() {
     clearMessage();
-    renderItems(inventory);
+    renderItems(inventory, inventoryTableBody);
     updateResultsInfo(`Displaying all ${inventory.length} item(s).`);
 }
 function showPopularItems() {
     clearMessage();
     const popularItems = inventory.filter((item) => item.popularItem === "Yes");
-    renderItems(popularItems);
+    renderItems(popularItems, inventoryTableBody);
     updateResultsInfo(`Displaying ${popularItems.length} popular item(s).`);
     if (popularItems.length === 0) {
         showMessage("There are no popular items in the database.", "info");
     }
 }
-// ============================
-// Event Listeners
-// ============================
-addBtn.addEventListener("click", addItem);
-editBtn.addEventListener("click", loadItemForEdit);
-updateBtn.addEventListener("click", updateItemByName);
-deleteBtn.addEventListener("click", requestDeleteItemByName);
-clearBtn.addEventListener("click", () => {
-    clearForm();
-    clearMessage();
-});
-searchBtn.addEventListener("click", searchByName);
-showAllBtn.addEventListener("click", showAllItems);
-showPopularBtn.addEventListener("click", showPopularItems);
-confirmYesBtn.addEventListener("click", confirmDelete);
-confirmNoBtn.addEventListener("click", closeConfirmation);
-// ============================
-// Initial Render
-// ============================
-renderItems(inventory);
-updateResultsInfo(`Displaying all ${inventory.length} item(s).`);
+function initializeInventoryPage() {
+    showAllBtn === null || showAllBtn === void 0 ? void 0 : showAllBtn.addEventListener("click", showAllItems);
+    showPopularBtn === null || showPopularBtn === void 0 ? void 0 : showPopularBtn.addEventListener("click", showPopularItems);
+    showAllItems();
+}
+// ==================================================
+// APP START
+// ==================================================
+if (currentPage === "management") {
+    initializeManagementPage();
+}
+else if (currentPage === "search") {
+    initializeSearchPage();
+}
+else if (currentPage === "inventory") {
+    initializeInventoryPage();
+}

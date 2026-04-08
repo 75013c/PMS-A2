@@ -1,7 +1,3 @@
-// ============================
-// Type Definitions
-// ============================
-
 type Category = "Electronics" | "Furniture" | "Clothing" | "Tools" | "Miscellaneous";
 type StockStatus = "In Stock" | "Low Stock" | "Out of Stock";
 type PopularItem = "Yes" | "No";
@@ -30,11 +26,9 @@ interface FormDataShape {
   comment: string;
 }
 
-// ============================
-// Inventory Data
-// ============================
+const STORAGE_KEY = "inventory_session_data";
 
-const inventory: InventoryItem[] = [
+const defaultInventory: InventoryItem[] = [
   {
     itemId: "E1001",
     itemName: "Smart TV",
@@ -59,166 +53,57 @@ const inventory: InventoryItem[] = [
   }
 ];
 
-// ============================
-// DOM References
-// ============================
+function loadInventory(): InventoryItem[] {
+  const saved: string | null = sessionStorage.getItem(STORAGE_KEY);
 
-const itemIdInput = document.getElementById("itemId") as HTMLInputElement;
-const itemNameInput = document.getElementById("itemName") as HTMLInputElement;
-const categoryInput = document.getElementById("category") as HTMLSelectElement;
-const quantityInput = document.getElementById("quantity") as HTMLInputElement;
-const priceInput = document.getElementById("price") as HTMLInputElement;
-const supplierNameInput = document.getElementById("supplierName") as HTMLInputElement;
-const stockStatusInput = document.getElementById("stockStatus") as HTMLSelectElement;
-const popularItemInput = document.getElementById("popularItem") as HTMLSelectElement;
-const commentInput = document.getElementById("comment") as HTMLTextAreaElement;
-const searchNameInput = document.getElementById("searchName") as HTMLInputElement;
+  if (saved) {
+    return JSON.parse(saved) as InventoryItem[];
+  }
 
-const messageBox = document.getElementById("messageBox") as HTMLDivElement;
-const inventoryTableBody = document.getElementById("inventoryTableBody") as HTMLTableSectionElement;
-const resultsInfo = document.getElementById("resultsInfo") as HTMLDivElement;
-
-const addBtn = document.getElementById("addBtn") as HTMLButtonElement;
-const editBtn = document.getElementById("editBtn") as HTMLButtonElement;
-const updateBtn = document.getElementById("updateBtn") as HTMLButtonElement;
-const deleteBtn = document.getElementById("deleteBtn") as HTMLButtonElement;
-const clearBtn = document.getElementById("clearBtn") as HTMLButtonElement;
-const searchBtn = document.getElementById("searchBtn") as HTMLButtonElement;
-const showAllBtn = document.getElementById("showAllBtn") as HTMLButtonElement;
-const showPopularBtn = document.getElementById("showPopularBtn") as HTMLButtonElement;
-
-const confirmBox = document.getElementById("confirmBox") as HTMLDivElement;
-const confirmText = document.getElementById("confirmText") as HTMLDivElement;
-const confirmYesBtn = document.getElementById("confirmYesBtn") as HTMLButtonElement;
-const confirmNoBtn = document.getElementById("confirmNoBtn") as HTMLButtonElement;
-
-// ============================
-// Utility Functions
-// ============================
-
-function showMessage(message: string, type: "success" | "error" | "info"): void {
-  messageBox.className = `message ${type}`;
-  messageBox.innerHTML = message;
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultInventory));
+  return [...defaultInventory];
 }
 
-function clearMessage(): void {
-  messageBox.className = "message";
-  messageBox.innerHTML = "";
+let inventory: InventoryItem[] = loadInventory();
+let currentEditingItemName: string = "";
+let pendingDeleteName: string = "";
+
+// ---------- Global helpers ----------
+function saveData(): void {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
 }
 
-function normaliseName(name: string): string {
+function normalise(name: string): string {
   return name.trim().toLowerCase();
 }
 
-function getFormData(): FormDataShape {
-  return {
-    itemId: itemIdInput.value.trim(),
-    itemName: itemNameInput.value.trim(),
-    category: categoryInput.value,
-    quantity: quantityInput.value.trim(),
-    price: priceInput.value.trim(),
-    supplierName: supplierNameInput.value.trim(),
-    stockStatus: stockStatusInput.value,
-    popularItem: popularItemInput.value,
-    comment: commentInput.value.trim()
-  };
+function findItemByName(name: string): InventoryItem | undefined {
+  return inventory.find((item: InventoryItem): boolean => normalise(item.itemName) === normalise(name));
 }
 
-function validateForm(data: FormDataShape, isUpdate: boolean = false): string[] {
-  const errors: string[] = [];
-
-  if (!isUpdate && data.itemId === "") {
-    errors.push("Item ID is required.");
-  }
-
-  if (data.itemName === "") {
-    errors.push("Item Name is required.");
-  }
-
-  if (data.category === "") {
-    errors.push("Category is required.");
-  }
-
-  if (data.quantity === "") {
-    errors.push("Quantity is required.");
-  } else if (Number.isNaN(Number(data.quantity)) || Number(data.quantity) < 0) {
-    errors.push("Quantity must be a number greater than or equal to 0.");
-  }
-
-  if (data.price === "") {
-    errors.push("Price is required.");
-  } else if (Number.isNaN(Number(data.price)) || Number(data.price) < 0) {
-    errors.push("Price must be a number greater than or equal to 0.");
-  }
-
-  if (data.supplierName === "") {
-    errors.push("Supplier Name is required.");
-  }
-
-  if (data.stockStatus === "") {
-    errors.push("Stock Status is required.");
-  }
-
-  if (data.popularItem === "") {
-    errors.push("Popular Item is required.");
-  }
-
-  return errors;
-}
-
-function isDuplicateItemId(itemId: string): boolean {
-  return inventory.some((item: InventoryItem): boolean => item.itemId === itemId);
-}
-
-function findItemByName(itemName: string): InventoryItem | undefined {
-  return inventory.find(
-    (item: InventoryItem): boolean => normaliseName(item.itemName) === normaliseName(itemName)
-  );
-}
-
-function findItemIndexByName(itemName: string): number {
-  return inventory.findIndex(
-    (item: InventoryItem): boolean => normaliseName(item.itemName) === normaliseName(itemName)
-  );
+function findIndexByName(name: string): number {
+  return inventory.findIndex((item: InventoryItem): boolean => normalise(item.itemName) === normalise(name));
 }
 
 function getStockBadge(status: StockStatus): string {
   if (status === "In Stock") {
     return `<span class="badge badge-green">${status}</span>`;
   }
+
   if (status === "Low Stock") {
     return `<span class="badge badge-yellow">${status}</span>`;
   }
+
   return `<span class="badge badge-red">${status}</span>`;
 }
 
-function clearForm(): void {
-  itemIdInput.value = "";
-  itemNameInput.value = "";
-  categoryInput.value = "";
-  quantityInput.value = "";
-  priceInput.value = "";
-  supplierNameInput.value = "";
-  stockStatusInput.value = "";
-  popularItemInput.value = "";
-  commentInput.value = "";
-}
+function renderItems(items: InventoryItem[], tableBody: HTMLTableSectionElement | null): void {
+  if (!tableBody) {
+    return;
+  }
 
-function fillForm(item: InventoryItem): void {
-  itemIdInput.value = item.itemId;
-  itemNameInput.value = item.itemName;
-  categoryInput.value = item.category;
-  quantityInput.value = item.quantity.toString();
-  priceInput.value = item.price.toString();
-  supplierNameInput.value = item.supplierName;
-  stockStatusInput.value = item.stockStatus;
-  popularItemInput.value = item.popularItem;
-  commentInput.value = item.comment;
-}
-
-function renderItems(items: InventoryItem[]): void {
   if (items.length === 0) {
-    inventoryTableBody.innerHTML = `
+    tableBody.innerHTML = `
       <tr>
         <td colspan="9">No items found.</td>
       </tr>
@@ -226,7 +111,7 @@ function renderItems(items: InventoryItem[]): void {
     return;
   }
 
-  inventoryTableBody.innerHTML = items
+  tableBody.innerHTML = items
     .map((item: InventoryItem): string => {
       return `
         <tr>
@@ -245,8 +130,164 @@ function renderItems(items: InventoryItem[]): void {
     .join("");
 }
 
+// ---------- Page detection ----------
+const bodyElement = document.body as HTMLBodyElement;
+const currentPage: string = bodyElement.dataset.page ?? "";
+
+// ---------- Shared page elements ----------
+const messageBox = document.getElementById("messageBox") as HTMLDivElement | null;
+const resultsInfo = document.getElementById("resultsInfo") as HTMLDivElement | null;
+const inventoryTableBody = document.getElementById("inventoryTableBody") as HTMLTableSectionElement | null;
+
+function showMessage(message: string, type: "success" | "error" | "info"): void {
+  if (!messageBox) {
+    return;
+  }
+
+  messageBox.className = `message ${type}`;
+  messageBox.innerHTML = message;
+}
+
+function clearMessage(): void {
+  if (!messageBox) {
+    return;
+  }
+
+  messageBox.className = "message";
+  messageBox.innerHTML = "";
+}
+
 function updateResultsInfo(text: string): void {
+  if (!resultsInfo) {
+    return;
+  }
+
   resultsInfo.innerHTML = text;
+}
+
+// ==================================================
+// MANAGEMENT PAGE
+// ==================================================
+const addPanel = document.getElementById("addPanel") as HTMLDivElement | null;
+const updatePanel = document.getElementById("updatePanel") as HTMLDivElement | null;
+const deletePanel = document.getElementById("deletePanel") as HTMLDivElement | null;
+
+const showAddPanelBtn = document.getElementById("showAddPanelBtn") as HTMLButtonElement | null;
+const showUpdatePanelBtn = document.getElementById("showUpdatePanelBtn") as HTMLButtonElement | null;
+const showDeletePanelBtn = document.getElementById("showDeletePanelBtn") as HTMLButtonElement | null;
+
+// add inputs
+const addItemIdInput = document.getElementById("addItemId") as HTMLInputElement | null;
+const addItemNameInput = document.getElementById("addItemName") as HTMLInputElement | null;
+const addCategoryInput = document.getElementById("addCategory") as HTMLSelectElement | null;
+const addQuantityInput = document.getElementById("addQuantity") as HTMLInputElement | null;
+const addPriceInput = document.getElementById("addPrice") as HTMLInputElement | null;
+const addSupplierInput = document.getElementById("addSupplierName") as HTMLInputElement | null;
+const addStockInput = document.getElementById("addStockStatus") as HTMLSelectElement | null;
+const addPopularInput = document.getElementById("addPopularItem") as HTMLSelectElement | null;
+const addCommentInput = document.getElementById("addComment") as HTMLTextAreaElement | null;
+
+// update inputs
+const loadItemNameInput = document.getElementById("loadItemName") as HTMLInputElement | null;
+const updateItemIdInput = document.getElementById("updateItemId") as HTMLInputElement | null;
+const updateItemNameInput = document.getElementById("updateItemName") as HTMLInputElement | null;
+const updateCategoryInput = document.getElementById("updateCategory") as HTMLSelectElement | null;
+const updateQuantityInput = document.getElementById("updateQuantity") as HTMLInputElement | null;
+const updatePriceInput = document.getElementById("updatePrice") as HTMLInputElement | null;
+const updateSupplierInput = document.getElementById("updateSupplierName") as HTMLInputElement | null;
+const updateStockInput = document.getElementById("updateStockStatus") as HTMLSelectElement | null;
+const updatePopularInput = document.getElementById("updatePopularItem") as HTMLSelectElement | null;
+const updateCommentInput = document.getElementById("updateComment") as HTMLTextAreaElement | null;
+
+// delete input
+const deleteItemNameInput = document.getElementById("deleteItemName") as HTMLInputElement | null;
+
+// buttons
+const addBtn = document.getElementById("addBtn") as HTMLButtonElement | null;
+const editBtn = document.getElementById("editBtn") as HTMLButtonElement | null;
+const updateBtn = document.getElementById("updateBtn") as HTMLButtonElement | null;
+const deleteBtn = document.getElementById("deleteBtn") as HTMLButtonElement | null;
+
+const clearAddBtn = document.getElementById("clearAddBtn") as HTMLButtonElement | null;
+const clearUpdateBtn = document.getElementById("clearUpdateBtn") as HTMLButtonElement | null;
+const clearDeleteBtn = document.getElementById("clearDeleteBtn") as HTMLButtonElement | null;
+
+// confirmation
+const confirmBox = document.getElementById("confirmBox") as HTMLDivElement | null;
+const confirmText = document.getElementById("confirmText") as HTMLDivElement | null;
+const confirmYesBtn = document.getElementById("confirmYesBtn") as HTMLButtonElement | null;
+const confirmNoBtn = document.getElementById("confirmNoBtn") as HTMLButtonElement | null;
+
+const formCard = document.getElementById("formCard") as HTMLElement | null;
+
+function validateForm(data: FormDataShape, isUpdate: boolean = false): string[] {
+  const errors: string[] = [];
+
+  if (!isUpdate && data.itemId.trim() === "") {
+    errors.push("Item ID is required.");
+  }
+
+  if (data.itemName.trim() === "") {
+    errors.push("Item Name is required.");
+  }
+
+  if (data.category.trim() === "") {
+    errors.push("Category is required.");
+  }
+
+  if (data.quantity.trim() === "") {
+    errors.push("Quantity is required.");
+  } else if (Number.isNaN(Number(data.quantity)) || Number(data.quantity) < 0) {
+    errors.push("Quantity must be a number greater than or equal to 0.");
+  }
+
+  if (data.price.trim() === "") {
+    errors.push("Price is required.");
+  } else if (Number.isNaN(Number(data.price)) || Number(data.price) < 0) {
+    errors.push("Price must be a number greater than or equal to 0.");
+  }
+
+  if (data.supplierName.trim() === "") {
+    errors.push("Supplier Name is required.");
+  }
+
+  if (data.stockStatus.trim() === "") {
+    errors.push("Stock Status is required.");
+  }
+
+  if (data.popularItem.trim() === "") {
+    errors.push("Popular Item is required.");
+  }
+
+  return errors;
+}
+
+function getAddFormData(): FormDataShape {
+  return {
+    itemId: addItemIdInput?.value.trim() ?? "",
+    itemName: addItemNameInput?.value.trim() ?? "",
+    category: addCategoryInput?.value ?? "",
+    quantity: addQuantityInput?.value.trim() ?? "",
+    price: addPriceInput?.value.trim() ?? "",
+    supplierName: addSupplierInput?.value.trim() ?? "",
+    stockStatus: addStockInput?.value ?? "",
+    popularItem: addPopularInput?.value ?? "",
+    comment: addCommentInput?.value.trim() ?? ""
+  };
+}
+
+function getUpdateFormData(): FormDataShape {
+  return {
+    itemId: updateItemIdInput?.value.trim() ?? "",
+    itemName: updateItemNameInput?.value.trim() ?? "",
+    category: updateCategoryInput?.value ?? "",
+    quantity: updateQuantityInput?.value.trim() ?? "",
+    price: updatePriceInput?.value.trim() ?? "",
+    supplierName: updateSupplierInput?.value.trim() ?? "",
+    stockStatus: updateStockInput?.value ?? "",
+    popularItem: updatePopularInput?.value ?? "",
+    comment: updateCommentInput?.value.trim() ?? ""
+  };
 }
 
 function toInventoryItem(data: FormDataShape, existingId?: string): InventoryItem {
@@ -263,14 +304,67 @@ function toInventoryItem(data: FormDataShape, existingId?: string): InventoryIte
   };
 }
 
-// ============================
-// CRUD Functions
-// ============================
+function clearAddForm(): void {
+  if (addItemIdInput) addItemIdInput.value = "";
+  if (addItemNameInput) addItemNameInput.value = "";
+  if (addCategoryInput) addCategoryInput.value = "";
+  if (addQuantityInput) addQuantityInput.value = "";
+  if (addPriceInput) addPriceInput.value = "";
+  if (addSupplierInput) addSupplierInput.value = "";
+  if (addStockInput) addStockInput.value = "";
+  if (addPopularInput) addPopularInput.value = "";
+  if (addCommentInput) addCommentInput.value = "";
+}
+
+function clearUpdateForm(): void {
+  if (loadItemNameInput) loadItemNameInput.value = "";
+  if (updateItemIdInput) updateItemIdInput.value = "";
+  if (updateItemNameInput) updateItemNameInput.value = "";
+  if (updateCategoryInput) updateCategoryInput.value = "";
+  if (updateQuantityInput) updateQuantityInput.value = "";
+  if (updatePriceInput) updatePriceInput.value = "";
+  if (updateSupplierInput) updateSupplierInput.value = "";
+  if (updateStockInput) updateStockInput.value = "";
+  if (updatePopularInput) updatePopularInput.value = "";
+  if (updateCommentInput) updateCommentInput.value = "";
+  currentEditingItemName = "";
+}
+
+function clearDeleteForm(): void {
+  if (deleteItemNameInput) {
+    deleteItemNameInput.value = "";
+  }
+}
+
+function setPanel(type: "add" | "update" | "delete"): void {
+  addPanel?.classList.add("hidden");
+  updatePanel?.classList.add("hidden");
+  deletePanel?.classList.add("hidden");
+
+  showAddPanelBtn?.classList.remove("active-action");
+  showUpdatePanelBtn?.classList.remove("active-action");
+  showDeletePanelBtn?.classList.remove("active-action");
+
+  formCard?.classList.remove("hidden");
+
+  if (type === "add") {
+    addPanel?.classList.remove("hidden");
+    showAddPanelBtn?.classList.add("active-action");
+  } else if (type === "update") {
+    updatePanel?.classList.remove("hidden");
+    showUpdatePanelBtn?.classList.add("active-action");
+  } else {
+    deletePanel?.classList.remove("hidden");
+    showDeletePanelBtn?.classList.add("active-action");
+  }
+
+  clearMessage();
+}
 
 function addItem(): void {
   clearMessage();
 
-  const data: FormDataShape = getFormData();
+  const data: FormDataShape = getAddFormData();
   const errors: string[] = validateForm(data);
 
   if (errors.length > 0) {
@@ -278,7 +372,7 @@ function addItem(): void {
     return;
   }
 
-  if (isDuplicateItemId(data.itemId)) {
+  if (inventory.some((item: InventoryItem): boolean => item.itemId === data.itemId)) {
     showMessage("Item ID must be unique. This Item ID already exists.", "error");
     return;
   }
@@ -288,40 +382,53 @@ function addItem(): void {
     return;
   }
 
-  const newItem: InventoryItem = toInventoryItem(data);
-  inventory.push(newItem);
-
-  showMessage(`Item <strong>${newItem.itemName}</strong> added successfully.`, "success");
-  clearForm();
-  renderItems(inventory);
-  updateResultsInfo(`Displaying ${inventory.length} item(s).`);
+  inventory.push(toInventoryItem(data));
+  saveData();
+  clearAddForm();
+  showMessage(`Item <strong>${data.itemName}</strong> added successfully.`, "success");
 }
 
-function loadItemForEdit(): void {
+function loadItem(): void {
   clearMessage();
 
-  const itemName: string = itemNameInput.value.trim();
+  const name: string = loadItemNameInput?.value.trim() ?? "";
 
-  if (itemName === "") {
-    showMessage("Enter the Item Name in the form first to load it for editing.", "error");
+  if (name === "") {
+    showMessage("Enter the Item Name first to load it for editing.", "error");
     return;
   }
 
-  const item: InventoryItem | undefined = findItemByName(itemName);
+  const item: InventoryItem | undefined = findItemByName(name);
 
   if (!item) {
-    showMessage(`No item found with name <strong>${itemName}</strong>.`, "error");
+    showMessage("Item not found.", "error");
     return;
   }
 
-  fillForm(item);
-  showMessage(`Item <strong>${item.itemName}</strong> loaded into the form for editing.`, "info");
+  currentEditingItemName = item.itemName;
+
+  if (updateItemIdInput) updateItemIdInput.value = item.itemId;
+  if (updateItemNameInput) updateItemNameInput.value = item.itemName;
+  if (updateCategoryInput) updateCategoryInput.value = item.category;
+  if (updateQuantityInput) updateQuantityInput.value = item.quantity.toString();
+  if (updatePriceInput) updatePriceInput.value = item.price.toString();
+  if (updateSupplierInput) updateSupplierInput.value = item.supplierName;
+  if (updateStockInput) updateStockInput.value = item.stockStatus;
+  if (updatePopularInput) updatePopularInput.value = item.popularItem;
+  if (updateCommentInput) updateCommentInput.value = item.comment;
+
+  showMessage(`Item <strong>${item.itemName}</strong> loaded for editing.`, "info");
 }
 
-function updateItemByName(): void {
+function updateItem(): void {
   clearMessage();
 
-  const data: FormDataShape = getFormData();
+  if (currentEditingItemName === "") {
+    showMessage("Load item first.", "error");
+    return;
+  }
+
+  const data: FormDataShape = getUpdateFormData();
   const errors: string[] = validateForm(data, true);
 
   if (errors.length > 0) {
@@ -329,48 +436,59 @@ function updateItemByName(): void {
     return;
   }
 
-  const targetIndex: number = findItemIndexByName(data.itemName);
+  const index: number = findIndexByName(currentEditingItemName);
 
-  if (targetIndex === -1) {
-    showMessage(`Cannot update. No item found with name <strong>${data.itemName}</strong>.`, "error");
+  if (index === -1) {
+    showMessage("Original item could not be found.", "error");
     return;
   }
 
-  const existingId: string = inventory[targetIndex].itemId;
+  const duplicateNameIndex: number = inventory.findIndex(
+    (item: InventoryItem): boolean =>
+      normalise(item.itemName) === normalise(data.itemName) &&
+      normalise(item.itemName) !== normalise(currentEditingItemName)
+  );
 
-  inventory[targetIndex] = toInventoryItem(data, existingId);
+  if (duplicateNameIndex !== -1) {
+    showMessage("Another item already uses this Item Name.", "error");
+    return;
+  }
 
-  showMessage(`Item <strong>${data.itemName}</strong> updated successfully.`, "success");
-  renderItems(inventory);
-  updateResultsInfo(`Displaying ${inventory.length} item(s).`);
+  const existingId: string = inventory[index].itemId;
+  inventory[index] = toInventoryItem(data, existingId);
+  currentEditingItemName = inventory[index].itemName;
+  saveData();
+
+  showMessage(`Item <strong>${inventory[index].itemName}</strong> updated successfully.`, "success");
 }
 
-let pendingDeleteName: string = "";
-
-function requestDeleteItemByName(): void {
+function requestDelete(): void {
   clearMessage();
 
-  const nameToDelete: string = itemNameInput.value.trim();
+  const name: string = deleteItemNameInput?.value.trim() ?? "";
 
-  if (nameToDelete === "") {
-    showMessage("Enter the Item Name in the form to delete an item.", "error");
+  if (name === "") {
+    showMessage("Enter the Item Name to delete an item.", "error");
     return;
   }
 
-  const item: InventoryItem | undefined = findItemByName(nameToDelete);
+  const item: InventoryItem | undefined = findItemByName(name);
 
   if (!item) {
-    showMessage(`No item found with name <strong>${nameToDelete}</strong>.`, "error");
+    showMessage("Item not found.", "error");
     return;
   }
 
   pendingDeleteName = item.itemName;
-  confirmText.innerHTML = `Are you sure you want to delete <strong>${item.itemName}</strong>?`;
-  confirmBox.classList.remove("hidden");
+
+  if (confirmText && confirmBox) {
+    confirmText.innerHTML = `Are you sure you want to delete <strong>${item.itemName}</strong>?`;
+    confirmBox.classList.remove("hidden");
+  }
 }
 
 function confirmDelete(): void {
-  const index: number = findItemIndexByName(pendingDeleteName);
+  const index: number = findIndexByName(pendingDeleteName);
 
   if (index === -1) {
     showMessage("Delete failed. Item could not be found.", "error");
@@ -378,26 +496,68 @@ function confirmDelete(): void {
     return;
   }
 
-  const deletedItemName: string = inventory[index].itemName;
+  const deletedName: string = inventory[index].itemName;
   inventory.splice(index, 1);
-
-  showMessage(`Item <strong>${deletedItemName}</strong> deleted successfully.`, "success");
+  saveData();
+  clearDeleteForm();
   closeConfirmation();
-  clearForm();
-  renderItems(inventory);
-  updateResultsInfo(`Displaying ${inventory.length} item(s).`);
+  showMessage(`Item <strong>${deletedName}</strong> deleted successfully.`, "success");
 }
 
 function closeConfirmation(): void {
   pendingDeleteName = "";
-  confirmBox.classList.add("hidden");
-  confirmText.innerHTML = "";
+
+  if (confirmBox) {
+    confirmBox.classList.add("hidden");
+  }
+
+  if (confirmText) {
+    confirmText.innerHTML = "";
+  }
 }
 
-function searchByName(): void {
+function initializeManagementPage(): void {
+  showAddPanelBtn?.addEventListener("click", (): void => setPanel("add"));
+  showUpdatePanelBtn?.addEventListener("click", (): void => setPanel("update"));
+  showDeletePanelBtn?.addEventListener("click", (): void => setPanel("delete"));
+
+  addBtn?.addEventListener("click", addItem);
+  editBtn?.addEventListener("click", loadItem);
+  updateBtn?.addEventListener("click", updateItem);
+  deleteBtn?.addEventListener("click", requestDelete);
+
+  clearAddBtn?.addEventListener("click", (): void => {
+    clearAddForm();
+    clearMessage();
+  });
+
+  clearUpdateBtn?.addEventListener("click", (): void => {
+    clearUpdateForm();
+    clearMessage();
+  });
+
+  clearDeleteBtn?.addEventListener("click", (): void => {
+    clearDeleteForm();
+    clearMessage();
+  });
+
+  confirmYesBtn?.addEventListener("click", confirmDelete);
+  confirmNoBtn?.addEventListener("click", closeConfirmation);
+
+  clearMessage();
+}
+
+// ==================================================
+// SEARCH PAGE
+// ==================================================
+const searchNameInput = document.getElementById("searchName") as HTMLInputElement | null;
+const searchBtn = document.getElementById("searchBtn") as HTMLButtonElement | null;
+const clearSearchBtn = document.getElementById("clearSearchBtn") as HTMLButtonElement | null;
+
+function searchItem(): void {
   clearMessage();
 
-  const keyword: string = searchNameInput.value.trim();
+  const keyword: string = searchNameInput?.value.trim() ?? "";
 
   if (keyword === "") {
     showMessage("Please enter an Item Name to search.", "error");
@@ -408,7 +568,7 @@ function searchByName(): void {
     item.itemName.toLowerCase().includes(keyword.toLowerCase())
   );
 
-  renderItems(results);
+  renderItems(results, inventoryTableBody);
   updateResultsInfo(`Search results: ${results.length} item(s) found for "${keyword}".`);
 
   if (results.length === 0) {
@@ -418,9 +578,33 @@ function searchByName(): void {
   }
 }
 
+function clearSearch(): void {
+  if (searchNameInput) {
+    searchNameInput.value = "";
+  }
+
+  clearMessage();
+  renderItems([], inventoryTableBody);
+  updateResultsInfo("No search performed yet.");
+}
+
+function initializeSearchPage(): void {
+  searchBtn?.addEventListener("click", searchItem);
+  clearSearchBtn?.addEventListener("click", clearSearch);
+
+  renderItems([], inventoryTableBody);
+  updateResultsInfo("No search performed yet.");
+}
+
+// ==================================================
+// INVENTORY PAGE
+// ==================================================
+const showAllBtn = document.getElementById("showAllBtn") as HTMLButtonElement | null;
+const showPopularBtn = document.getElementById("showPopularBtn") as HTMLButtonElement | null;
+
 function showAllItems(): void {
   clearMessage();
-  renderItems(inventory);
+  renderItems(inventory, inventoryTableBody);
   updateResultsInfo(`Displaying all ${inventory.length} item(s).`);
 }
 
@@ -431,7 +615,7 @@ function showPopularItems(): void {
     (item: InventoryItem): boolean => item.popularItem === "Yes"
   );
 
-  renderItems(popularItems);
+  renderItems(popularItems, inventoryTableBody);
   updateResultsInfo(`Displaying ${popularItems.length} popular item(s).`);
 
   if (popularItems.length === 0) {
@@ -439,27 +623,20 @@ function showPopularItems(): void {
   }
 }
 
-// ============================
-// Event Listeners
-// ============================
+function initializeInventoryPage(): void {
+  showAllBtn?.addEventListener("click", showAllItems);
+  showPopularBtn?.addEventListener("click", showPopularItems);
 
-addBtn.addEventListener("click", addItem);
-editBtn.addEventListener("click", loadItemForEdit);
-updateBtn.addEventListener("click", updateItemByName);
-deleteBtn.addEventListener("click", requestDeleteItemByName);
-clearBtn.addEventListener("click", (): void => {
-  clearForm();
-  clearMessage();
-});
-searchBtn.addEventListener("click", searchByName);
-showAllBtn.addEventListener("click", showAllItems);
-showPopularBtn.addEventListener("click", showPopularItems);
-confirmYesBtn.addEventListener("click", confirmDelete);
-confirmNoBtn.addEventListener("click", closeConfirmation);
+  showAllItems();
+}
 
-// ============================
-// Initial Render
-// ============================
-
-renderItems(inventory);
-updateResultsInfo(`Displaying all ${inventory.length} item(s).`);
+// ==================================================
+// APP START
+// ==================================================
+if (currentPage === "management") {
+  initializeManagementPage();
+} else if (currentPage === "search") {
+  initializeSearchPage();
+} else if (currentPage === "inventory") {
+  initializeInventoryPage();
+}

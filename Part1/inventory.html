@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Display</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="inventory">
+  <div class="container">
+    <header>
+      <h1>Inventory Management System</h1>
+    </header>
+  </div>
+
+  <nav class="navbar">
+    <a href="index.html">Item Management</a>
+    <a href="search.html">Search Items</a>
+    <a href="inventory.html" class="active">Inventory Display</a>
+  </nav>
+
+  <div class="container">
+    <section class="card">
+      <h2>Display Inventory</h2>
+
+      <div id="messageBox" class="message" aria-live="polite"></div>
+
+      <div class="button-row">
+        <button type="button" id="showAllBtn">Display All Items</button>
+        <button type="button" id="showPopularBtn" class="secondary">Display Popular Items</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Inventory Records</h2>
+      <div id="resultsInfo" class="results-info"></div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Item ID</th>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Supplier</th>
+              <th>Stock Status</th>
+              <th>Popular</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
