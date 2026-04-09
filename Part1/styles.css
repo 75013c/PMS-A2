@@ -5,23 +5,25 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f4f7fb;
+  background: #eeeeee;
   color: #1f2937;
 }
 
 .container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 16px 16px 0;
 }
 
-header {
+.header {
   text-align: center;
+  background: #fdfeff;
+  padding: 16px;
 }
 
 h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 600;
   line-height: 1.2;
   color: #000;
@@ -30,6 +32,8 @@ h1 {
 h2 {
   margin-top: 15px;
   text-align: center;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 .navbar {
@@ -43,11 +47,11 @@ h2 {
   align-items: stretch;
   padding: 0px 24px;
   border-radius: 3px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .navbar a {
-   color: #ffffff;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 500;
   font-size: 22px;
@@ -70,8 +74,8 @@ h2 {
 
 .card {
   background: #ffffff;
-  padding: 14px;
-  margin-bottom: 16px;
+  padding: 14px 40px;
+  margin-bottom: 26px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
@@ -89,10 +93,6 @@ h2 {
   gap: 14px;
 }
 
-.search-grid {
-  grid-template-columns: 1fr;
-}
-
 .field {
   display: flex;
   flex-direction: column;
@@ -103,8 +103,10 @@ h2 {
 }
 
 label {
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 18px;
+  /* margin-bottom: 15px; */
+  margin: 5px 0 15px;
 }
 
 input,
@@ -117,6 +119,8 @@ button {
 input,
 select,
 textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
   padding: 10px 12px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
@@ -129,32 +133,84 @@ textarea {
 
 .button-row {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+  margin-top: 14px;
 }
 
-button {
+.button-row button {
   border: none;
-  padding: 10px 14px;
   border-radius: 8px;
+  width: 180px;
+  height: 52px;
+  display: flex;
   cursor: pointer;
-  background: #2563eb;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 18px;
   color: white;
-  font-weight: 600;
 }
 
-button:hover {
-  opacity: 0.95;
+.clear-btn {
+  background: #e1ba1d;
 }
 
-button.secondary {
-  background: #475569;
+#searchBtn,
+#showPopularBtn,
+#showAllBtn {
+  margin-bottom: 10px;
 }
 
-button.danger {
-  background: #dc2626;
+.clear-btn:hover {
+  background: #eab308;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 8px rgba(207, 207, 207, 0.22);
+  filter: brightness(1.05);
 }
+
+
+.add-save-btn {
+  background: #168c41;
+  /* color: #ffffff; */
+}
+
+.add-save-btn:hover {
+  background: #16a149;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(34, 197, 94, 0.22);
+  filter: brightness(1.05);
+}
+
+.update-save-btn {
+  background: #214dac;
+  /* color: #ffffff; */
+}
+
+.update-save-btn:hover {
+  background: #2a5adf;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.22);
+  filter: brightness(1.05);
+}
+
+.delete-action-btn {
+  background: #ae1c1c;
+  /* color: #ffffff; */
+}
+
+.delete-action-btn:hover {
+  background: #c21b1b;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.22);
+  filter: brightness(1.05);
+}
+
+
+
+
+
 
 .message {
   min-height: 24px;
@@ -183,9 +239,12 @@ button.danger {
 }
 
 .results-info {
-  margin-bottom: 10px;
+  text-align: center;
+  margin-top: 3px;
+  margin-bottom: 25px;
   color: #475569;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 17px;
 }
 
 .table-wrapper {
@@ -195,19 +254,35 @@ button.danger {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  /* table-layout: fixed; */
 }
 
 th,
 td {
   border: 1px solid #e5e7eb;
-  padding: 10px;
+  padding: 9px;
   text-align: left;
   vertical-align: top;
 }
 
 th {
   background: #eff6ff;
+}
+
+
+th {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.search-results-card {
+  padding-bottom: 24px;
 }
 
 .hidden {
@@ -250,52 +325,135 @@ th {
 }
 
 .section-note {
-  margin-top: 0;
-  color: #64748b;
+  line-height: 1.1;
+  color: #848484;
 }
+
+.section-note.search-note {
+  margin: 8px 0 25px;
+}
+
+.section-note.inventory-note {
+  margin: 8px 0 12px;
+}
+
 
 .action-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 14px;
+  grid-template-columns: auto auto auto;
+  justify-content: center;
+  gap: 65px;
+  margin-top: 20px;
 }
 
 .action-btn {
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
-  background: #e2e8f0;
-  color: #1e293b;
-}
-
-.action-btn:hover {
-  opacity: 1;
-  background: #cbd5e1;
-}
-
-.active-action {
-  background: #2563eb;
+  width: 190px;
+  min-height: 60px;
+  padding: 15px 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 500;
   color: #ffffff;
+  margin: 0 auto 10px;
+  cursor: pointer;
+  transition: 
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    filter 0.22s ease,
+    background-color 0.22s ease;
 }
 
-.danger-action {
-  background: #fee2e2;
-  color: #991b1b;
+#showAddPanelBtn {
+  background: #4d8060;
+}
+
+#showUpdatePanelBtn {
+  background: #465c8b;
+}
+
+#showDeletePanelBtn {
+  background: #8e2929;
+}
+
+/* hover：阴影 + 浅色光效 + 悬浮 */
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+  filter: brightness(1.08);
+}
+
+/* 选中状态：颜色加深 */
+#showAddPanelBtn.active-action {
+  background: #14a84a;
+}
+
+#showUpdatePanelBtn.active-action {
+  background: #2e58cc;
+}
+
+#showDeletePanelBtn.active-action {
+  background: #ca2525;
+}
+
+/* 选中时 hover 更明显一点 */
+.action-btn.active-action:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  filter: brightness(1.12);
 }
 
 .lookup-box {
-  background: #f8fafc;
+  text-align: center;
+  background: #f0f0f0;
   border: 1px solid #e2e8f0;
   padding: 14px;
   border-radius: 10px;
-  margin-bottom: 16px;
 }
 
 input[readonly] {
-  background: #f1f5f9;
+  background: #ededed;
   color: #475569;
+}
+
+#loadItemName,
+#deleteItemName, 
+#searchName {
+  width: 60%;
+  margin: 0 auto;
+  display: block;
+}
+
+#searchName {
+  margin-bottom: 10px;
+}
+
+#confirmBox {
+  text-align: center;
+  background: #f8dfdf;
+  border: 1px solid #fdc2c2;
+  border-radius: 10px;
+  padding: 10px 0 14px;
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+
+#confirmText {
+  margin-top: 5px;
+  margin-bottom: 25px;
+
+}
+
+#updateForm {
+  margin-top: 16px;
+}
+
+
+.empty-state {
+  text-align: center;
+  /* padding: 18px 0; */
+  /* color: #475569; */
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {

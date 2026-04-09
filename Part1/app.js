@@ -65,7 +65,7 @@ function renderItems(items, tableBody) {
     if (items.length === 0) {
         tableBody.innerHTML = `
       <tr>
-        <td colspan="9">No items found.</td>
+        <td colspan="9" class="empty-state">No items found.</td>
       </tr>
     `;
         return;

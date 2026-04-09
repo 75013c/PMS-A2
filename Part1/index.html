@@ -7,35 +7,27 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="management">
-  <div class="container">
-    <header>
-      <h1>Inventory Management System</h1>
-    </header>
+  <div class="header">
+    <h1>Inventory Management System</h1>
   </div>
-
-
 
   <nav class="navbar">
     <a href="index.html" class="active">Item Management</a>
-    <a href="search.html">Search Items</a>
-    <a href="inventory.html">Inventory Display</a>
+    <a href="search.html">Search Item</a>
+    <a href="inventory.html">Display Inventory</a>
   </nav>
 
 
-
   <div class="container">
-
-
-
 
     <section class="card">
       <h2>Choose an Action</h2>
       <p class="section-note">Use the options below to add a new item, update item details, or remove an item from the inventory.</p>
 
       <div class="action-grid">
-        <button type="button" id="showAddPanelBtn" class="action-btn active-action">Add Item</button>
-        <button type="button" id="showUpdatePanelBtn" class="action-btn">Update Item</button>
-        <button type="button" id="showDeletePanelBtn" class="action-btn danger-action">Delete Item</button>
+        <button type="button" id="showAddPanelBtn" class="action-btn">Add Item</button>
+        <button type="button" id="showUpdatePanelBtn" class="action-btn">Edit Item</button>
+        <button type="button" id="showDeletePanelBtn" class="action-btn">Delete Item</button>
       </div>
     </section>
 
@@ -44,7 +36,14 @@
 
       <!-- Add Panel -->
       <div id="addPanel" class="panel hidden">
-        <h2>Add New Item</h2>
+        <h2>Add New Items to Inventory</h2>
+        <p class="section-note">
+          Please enter the information of the item you want to add.
+          <br>
+          <br>
+          Each field except "Comment on Item" must have a value.
+        </p>
+
         <form id="addForm">
           <div class="grid">
             <div class="field">
@@ -110,26 +109,30 @@
           </div>
 
           <div class="button-row">
-            <button type="button" id="addBtn">Save New Item</button>
-            <button type="button" id="clearAddBtn" class="secondary">Clear Form</button>
+            <button type="button" id="clearAddBtn" class="clear-btn">Clear Form</button>
+            <button type="button" id="addBtn" class="add-save-btn">Save Item</button>
           </div>
         </form>
       </div>
 
       <!-- Update Panel -->
       <div id="updatePanel" class="panel hidden">
-        <h2>Update Item</h2>
+        <h2>Edit Item Information</h2>
+        <p class="section-note">
+          Please enter a name to load item information.
+          <br>
+          <br>
+          Then you can modify information in the form below.
+        </p>
 
         <div class="lookup-box">
-          <div class="grid search-grid">
-            <div class="field">
-              <label for="loadItemName">Enter Item Name to Load *</label>
-              <input type="text" id="loadItemName" maxlength="60" />
-            </div>
+          <div class="field">
+            <label for="loadItemName">Enter Name to Load Item Information *</label>
+            <input type="text" id="loadItemName" maxlength="60" />
           </div>
 
           <div class="button-row">
-            <button type="button" id="editBtn">Load Item for Edit</button>
+            <button type="button" id="editBtn" class="update-save-btn">Load Info</button>
           </div>
         </div>
 
@@ -198,37 +201,36 @@
           </div>
 
           <div class="button-row">
-            <button type="button" id="updateBtn">Update Item</button>
-            <button type="button" id="clearUpdateBtn" class="secondary">Clear Form</button>
+            <button type="button" id="clearUpdateBtn" class="clear-btn">Clear Form</button>
+            <button type="button" id="updateBtn" class="update-save-btn">Update Item</button>
           </div>
         </form>
       </div>
 
       <!-- Delete Panel -->
       <div id="deletePanel" class="panel hidden">
-        <h2>Delete Item</h2>
-        <p class="section-note">Enter the item name and confirm deletion.</p>
+        <h2>Delete Items from Inventory</h2>
+        <p class="section-note">Please enter the item name for deletion.</p>
 
-        <div class="grid search-grid">
+        <div class="lookup-box">
           <div class="field">
-            <label for="deleteItemName">Item Name *</label>
+            <label for="deleteItemName">Enter Name to Delete Items from Inventory*</label>
             <input type="text" id="deleteItemName" maxlength="60" />
           </div>
-        </div>
+      
 
-        <div class="button-row">
-          <button type="button" id="deleteBtn" class="danger">Delete by Item Name</button>
-          <button type="button" id="clearDeleteBtn" class="secondary">Clear</button>
+          <div class="button-row form-actions">
+            <button type="button" id="deleteBtn" class="delete-action-btn">Delete Item</button>
+          </div>
         </div>
       </div>
-    </section>
 
     <section id="confirmBox" class="card hidden">
-      <h2>Confirmation</h2>
+      <h2>Delete Confirmation</h2>
       <div id="confirmText"></div>
       <div class="button-row top-gap">
-        <button type="button" id="confirmYesBtn" class="danger">Yes, Delete</button>
-        <button type="button" id="confirmNoBtn" class="secondary">Cancel</button>
+        <button type="button" id="confirmNoBtn" class="clear-btn">Cancel</button>
+        <button type="button" id="confirmYesBtn" class="delete-action-btn">Yes, Delete</button>
       </div>
     </section>
   </div>
