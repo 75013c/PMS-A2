@@ -1,3 +1,5 @@
+// 24832452 HongyuLiu
+
 "use strict";
 const STORAGE_KEY = "inventory_session_data";
 const defaultInventory = [
