@@ -1,3 +1,5 @@
+// 24832452 HongyuLiu
+
 type Category = "Electronics" | "Furniture" | "Clothing" | "Tools" | "Miscellaneous";
 type StockStatus = "In Stock" | "Low Stock" | "Out of Stock";
 type PopularItem = "Yes" | "No";
