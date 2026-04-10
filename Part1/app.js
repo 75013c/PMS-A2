@@ -23,6 +23,28 @@ const defaultInventory = [
         stockStatus: "Low Stock",
         popularItem: "No",
         comment: "Ergonomic design"
+    },
+    {
+        itemId: "C3001",
+        itemName: "Winter Jacket",
+        category: "Clothing",
+        quantity: 15,
+        price: 89.99,
+        supplierName: "UrbanWear",
+        stockStatus: "In Stock",
+        popularItem: "Yes",
+        comment: "Water-resistant material"
+    },
+    {
+        itemId: "T4001",
+        itemName: "Cordless Drill",
+        category: "Tools",
+        quantity: 3,
+        price: 129.99,
+        supplierName: "BuildPro",
+        stockStatus: "Low Stock",
+        popularItem: "No",
+        comment: "Includes battery and charger"
     }
 ];
 function loadInventory() {
