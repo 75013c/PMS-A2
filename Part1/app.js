@@ -1,5 +1,4 @@
 "use strict";
-var _a;
 const STORAGE_KEY = "inventory_session_data";
 const defaultInventory = [
     {
@@ -58,6 +57,34 @@ function loadInventory() {
 let inventory = loadInventory();
 let currentEditingItemName = "";
 let pendingDeleteName = "";
+// ---------- Navigation ----------
+const navManagement = document.getElementById("navManagement");
+const navSearch = document.getElementById("navSearch");
+const navInventory = document.getElementById("navInventory");
+const managementSection = document.getElementById("managementSection");
+const searchSection = document.getElementById("searchSection");
+const inventorySection = document.getElementById("inventorySection");
+function switchSection(section) {
+    managementSection === null || managementSection === void 0 ? void 0 : managementSection.classList.add("hidden");
+    searchSection === null || searchSection === void 0 ? void 0 : searchSection.classList.add("hidden");
+    inventorySection === null || inventorySection === void 0 ? void 0 : inventorySection.classList.add("hidden");
+    navManagement === null || navManagement === void 0 ? void 0 : navManagement.classList.remove("active");
+    navSearch === null || navSearch === void 0 ? void 0 : navSearch.classList.remove("active");
+    navInventory === null || navInventory === void 0 ? void 0 : navInventory.classList.remove("active");
+    if (section === "management") {
+        managementSection === null || managementSection === void 0 ? void 0 : managementSection.classList.remove("hidden");
+        navManagement === null || navManagement === void 0 ? void 0 : navManagement.classList.add("active");
+    }
+    else if (section === "search") {
+        searchSection === null || searchSection === void 0 ? void 0 : searchSection.classList.remove("hidden");
+        navSearch === null || navSearch === void 0 ? void 0 : navSearch.classList.add("active");
+    }
+    else {
+        inventorySection === null || inventorySection === void 0 ? void 0 : inventorySection.classList.remove("hidden");
+        navInventory === null || navInventory === void 0 ? void 0 : navInventory.classList.add("active");
+        showAllItems();
+    }
+}
 // ---------- Global helpers ----------
 function saveData() {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
@@ -110,36 +137,30 @@ function renderItems(items, tableBody) {
     })
         .join("");
 }
-// ---------- Page detection ----------
-const bodyElement = document.body;
-const currentPage = (_a = bodyElement.dataset.page) !== null && _a !== void 0 ? _a : "";
-// ---------- Shared page elements ----------
-const messageBox = document.getElementById("messageBox");
-const resultsInfo = document.getElementById("resultsInfo");
-const inventoryTableBody = document.getElementById("inventoryTableBody");
-function showMessage(message, type) {
-    if (!messageBox) {
+function showMessage(box, message, type) {
+    if (!box) {
         return;
     }
-    messageBox.className = `message ${type}`;
-    messageBox.innerHTML = message;
+    box.className = `message ${type}`;
+    box.innerHTML = message;
 }
-function clearMessage() {
-    if (!messageBox) {
+function clearMessage(box) {
+    if (!box) {
         return;
     }
-    messageBox.className = "message";
-    messageBox.innerHTML = "";
+    box.className = "message";
+    box.innerHTML = "";
 }
-function updateResultsInfo(text) {
-    if (!resultsInfo) {
+function updateResultsInfo(box, text) {
+    if (!box) {
         return;
     }
-    resultsInfo.innerHTML = text;
+    box.textContent = text;
 }
 // ==================================================
-// MANAGEMENT PAGE
+// MANAGEMENT SECTION
 // ==================================================
+const managementMessageBox = document.getElementById("managementMessageBox");
 const addPanel = document.getElementById("addPanel");
 const updatePanel = document.getElementById("updatePanel");
 const deletePanel = document.getElementById("deletePanel");
@@ -326,40 +347,40 @@ function setPanel(type) {
         deletePanel === null || deletePanel === void 0 ? void 0 : deletePanel.classList.remove("hidden");
         showDeletePanelBtn === null || showDeletePanelBtn === void 0 ? void 0 : showDeletePanelBtn.classList.add("active-action");
     }
-    clearMessage();
+    clearMessage(managementMessageBox);
 }
 function addItem() {
-    clearMessage();
+    clearMessage(managementMessageBox);
     const data = getAddFormData();
     const errors = validateForm(data);
     if (errors.length > 0) {
-        showMessage(errors.join("<br>"), "error");
+        showMessage(managementMessageBox, errors.join("<br>"), "error");
         return;
     }
     if (inventory.some((item) => item.itemId === data.itemId)) {
-        showMessage("Item ID must be unique. This Item ID already exists.", "error");
+        showMessage(managementMessageBox, "Item ID must be unique. This Item ID already exists.", "error");
         return;
     }
     if (findItemByName(data.itemName)) {
-        showMessage("Item Name already exists. Please use a different Item Name.", "error");
+        showMessage(managementMessageBox, "Item Name already exists. Please use a different Item Name.", "error");
         return;
     }
     inventory.push(toInventoryItem(data));
     saveData();
     clearAddForm();
-    showMessage(`Item <strong>${data.itemName}</strong> added successfully.`, "success");
+    showMessage(managementMessageBox, `Item <strong>${data.itemName}</strong> added successfully.`, "success");
 }
 function loadItem() {
     var _a;
-    clearMessage();
+    clearMessage(managementMessageBox);
     const name = (_a = loadItemNameInput === null || loadItemNameInput === void 0 ? void 0 : loadItemNameInput.value.trim()) !== null && _a !== void 0 ? _a : "";
     if (name === "") {
-        showMessage("Enter the Item Name first to load it for editing.", "error");
+        showMessage(managementMessageBox, "Enter the Item Name first to load it for editing.", "error");
         return;
     }
     const item = findItemByName(name);
     if (!item) {
-        showMessage("Item not found.", "error");
+        showMessage(managementMessageBox, "Item not found.", "error");
         return;
     }
     currentEditingItemName = item.itemName;
@@ -381,48 +402,48 @@ function loadItem() {
         updatePopularInput.value = item.popularItem;
     if (updateCommentInput)
         updateCommentInput.value = item.comment;
-    showMessage(`Item <strong>${item.itemName}</strong> loaded for editing.`, "info");
+    showMessage(managementMessageBox, `Item <strong>${item.itemName}</strong> loaded for editing.`, "info");
 }
 function updateItem() {
-    clearMessage();
+    clearMessage(managementMessageBox);
     if (currentEditingItemName === "") {
-        showMessage("Load item first.", "error");
+        showMessage(managementMessageBox, "Load item first.", "error");
         return;
     }
     const data = getUpdateFormData();
     const errors = validateForm(data, true);
     if (errors.length > 0) {
-        showMessage(errors.join("<br>"), "error");
+        showMessage(managementMessageBox, errors.join("<br>"), "error");
         return;
     }
     const index = findIndexByName(currentEditingItemName);
     if (index === -1) {
-        showMessage("Original item could not be found.", "error");
+        showMessage(managementMessageBox, "Original item could not be found.", "error");
         return;
     }
     const duplicateNameIndex = inventory.findIndex((item) => normalise(item.itemName) === normalise(data.itemName) &&
         normalise(item.itemName) !== normalise(currentEditingItemName));
     if (duplicateNameIndex !== -1) {
-        showMessage("Another item already uses this Item Name.", "error");
+        showMessage(managementMessageBox, "Another item already uses this Item Name.", "error");
         return;
     }
     const existingId = inventory[index].itemId;
     inventory[index] = toInventoryItem(data, existingId);
     currentEditingItemName = inventory[index].itemName;
     saveData();
-    showMessage(`Item <strong>${inventory[index].itemName}</strong> updated successfully.`, "success");
+    showMessage(managementMessageBox, `Item <strong>${inventory[index].itemName}</strong> updated successfully.`, "success");
 }
 function requestDelete() {
     var _a;
-    clearMessage();
+    clearMessage(managementMessageBox);
     const name = (_a = deleteItemNameInput === null || deleteItemNameInput === void 0 ? void 0 : deleteItemNameInput.value.trim()) !== null && _a !== void 0 ? _a : "";
     if (name === "") {
-        showMessage("Enter the Item Name to delete an item.", "error");
+        showMessage(managementMessageBox, "Enter the Item Name to delete an item.", "error");
         return;
     }
     const item = findItemByName(name);
     if (!item) {
-        showMessage("Item not found.", "error");
+        showMessage(managementMessageBox, "Item not found.", "error");
         return;
     }
     pendingDeleteName = item.itemName;
@@ -434,7 +455,7 @@ function requestDelete() {
 function confirmDelete() {
     const index = findIndexByName(pendingDeleteName);
     if (index === -1) {
-        showMessage("Delete failed. Item could not be found.", "error");
+        showMessage(managementMessageBox, "Delete failed. Item could not be found.", "error");
         closeConfirmation();
         return;
     }
@@ -443,7 +464,7 @@ function confirmDelete() {
     saveData();
     clearDeleteForm();
     closeConfirmation();
-    showMessage(`Item <strong>${deletedName}</strong> deleted successfully.`, "success");
+    showMessage(managementMessageBox, `Item <strong>${deletedName}</strong> deleted successfully.`, "success");
 }
 function closeConfirmation() {
     pendingDeleteName = "";
@@ -454,7 +475,7 @@ function closeConfirmation() {
         confirmText.innerHTML = "";
     }
 }
-function initializeManagementPage() {
+function initializeManagementSection() {
     showAddPanelBtn === null || showAddPanelBtn === void 0 ? void 0 : showAddPanelBtn.addEventListener("click", () => setPanel("add"));
     showUpdatePanelBtn === null || showUpdatePanelBtn === void 0 ? void 0 : showUpdatePanelBtn.addEventListener("click", () => setPanel("update"));
     showDeletePanelBtn === null || showDeletePanelBtn === void 0 ? void 0 : showDeletePanelBtn.addEventListener("click", () => setPanel("delete"));
@@ -464,78 +485,84 @@ function initializeManagementPage() {
     deleteBtn === null || deleteBtn === void 0 ? void 0 : deleteBtn.addEventListener("click", requestDelete);
     clearAddBtn === null || clearAddBtn === void 0 ? void 0 : clearAddBtn.addEventListener("click", () => {
         clearAddForm();
-        clearMessage();
+        clearMessage(managementMessageBox);
     });
     clearUpdateBtn === null || clearUpdateBtn === void 0 ? void 0 : clearUpdateBtn.addEventListener("click", () => {
         clearUpdateForm();
-        clearMessage();
+        clearMessage(managementMessageBox);
     });
     clearDeleteBtn === null || clearDeleteBtn === void 0 ? void 0 : clearDeleteBtn.addEventListener("click", () => {
         clearDeleteForm();
-        clearMessage();
+        clearMessage(managementMessageBox);
     });
     confirmYesBtn === null || confirmYesBtn === void 0 ? void 0 : confirmYesBtn.addEventListener("click", confirmDelete);
     confirmNoBtn === null || confirmNoBtn === void 0 ? void 0 : confirmNoBtn.addEventListener("click", closeConfirmation);
-    clearMessage();
+    clearMessage(managementMessageBox);
 }
 // ==================================================
-// SEARCH PAGE
+// SEARCH SECTION
 // ==================================================
+const searchMessageBox = document.getElementById("searchMessageBox");
+const searchResultsInfo = document.getElementById("searchResultsInfo");
+const searchTableBody = document.getElementById("searchTableBody");
 const searchNameInput = document.getElementById("searchName");
 const searchBtn = document.getElementById("searchBtn");
 const clearSearchBtn = document.getElementById("clearSearchBtn");
 function searchItem() {
     var _a;
-    clearMessage();
+    clearMessage(searchMessageBox);
     const keyword = (_a = searchNameInput === null || searchNameInput === void 0 ? void 0 : searchNameInput.value.trim()) !== null && _a !== void 0 ? _a : "";
     if (keyword === "") {
-        showMessage("Please enter an Item Name to search.", "error");
+        showMessage(searchMessageBox, "Please enter an Item Name to search.", "error");
         return;
     }
     const results = inventory.filter((item) => item.itemName.toLowerCase().includes(keyword.toLowerCase()));
-    renderItems(results, inventoryTableBody);
-    updateResultsInfo(`Search results: ${results.length} item(s) found for "${keyword}".`);
+    renderItems(results, searchTableBody);
+    updateResultsInfo(searchResultsInfo, `Search results: ${results.length} item(s) found for "${keyword}".`);
     if (results.length === 0) {
-        showMessage(`No items matched <strong>${keyword}</strong>.`, "info");
+        showMessage(searchMessageBox, `No items matched <strong>${keyword}</strong>.`, "info");
     }
     else {
-        showMessage(`Search completed for <strong>${keyword}</strong>.`, "success");
+        showMessage(searchMessageBox, `Search completed for <strong>${keyword}</strong>.`, "success");
     }
 }
 function clearSearch() {
     if (searchNameInput) {
         searchNameInput.value = "";
     }
-    clearMessage();
-    renderItems([], inventoryTableBody);
-    updateResultsInfo("No search performed yet.");
+    clearMessage(searchMessageBox);
+    renderItems([], searchTableBody);
+    updateResultsInfo(searchResultsInfo, "No search performed yet.");
 }
-function initializeSearchPage() {
+function initializeSearchSection() {
     searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", searchItem);
     clearSearchBtn === null || clearSearchBtn === void 0 ? void 0 : clearSearchBtn.addEventListener("click", clearSearch);
-    renderItems([], inventoryTableBody);
-    updateResultsInfo("No search performed yet.");
+    renderItems([], searchTableBody);
+    updateResultsInfo(searchResultsInfo, "No search performed yet.");
 }
 // ==================================================
-// INVENTORY PAGE
+// INVENTORY SECTION
 // ==================================================
+const inventoryMessageBox = document.getElementById("inventoryMessageBox");
+const inventoryResultsInfo = document.getElementById("inventoryResultsInfo");
+const inventoryTableBody = document.getElementById("inventoryTableBody");
 const showAllBtn = document.getElementById("showAllBtn");
 const showPopularBtn = document.getElementById("showPopularBtn");
 function showAllItems() {
-    clearMessage();
+    clearMessage(inventoryMessageBox);
     renderItems(inventory, inventoryTableBody);
-    updateResultsInfo(`Displaying all ${inventory.length} item(s).`);
+    updateResultsInfo(inventoryResultsInfo, `Displaying all ${inventory.length} item(s).`);
 }
 function showPopularItems() {
-    clearMessage();
+    clearMessage(inventoryMessageBox);
     const popularItems = inventory.filter((item) => item.popularItem === "Yes");
     renderItems(popularItems, inventoryTableBody);
-    updateResultsInfo(`Displaying ${popularItems.length} popular item(s).`);
+    updateResultsInfo(inventoryResultsInfo, `Displaying ${popularItems.length} popular item(s).`);
     if (popularItems.length === 0) {
-        showMessage("There are no popular items in the database.", "info");
+        showMessage(inventoryMessageBox, "There are no popular items in the database.", "info");
     }
 }
-function initializeInventoryPage() {
+function initializeInventorySection() {
     showAllBtn === null || showAllBtn === void 0 ? void 0 : showAllBtn.addEventListener("click", showAllItems);
     showPopularBtn === null || showPopularBtn === void 0 ? void 0 : showPopularBtn.addEventListener("click", showPopularItems);
     showAllItems();
@@ -543,12 +570,22 @@ function initializeInventoryPage() {
 // ==================================================
 // APP START
 // ==================================================
-if (currentPage === "management") {
-    initializeManagementPage();
+function initializeNavigation() {
+    navManagement === null || navManagement === void 0 ? void 0 : navManagement.addEventListener("click", (event) => {
+        event.preventDefault();
+        switchSection("management");
+    });
+    navSearch === null || navSearch === void 0 ? void 0 : navSearch.addEventListener("click", (event) => {
+        event.preventDefault();
+        switchSection("search");
+    });
+    navInventory === null || navInventory === void 0 ? void 0 : navInventory.addEventListener("click", (event) => {
+        event.preventDefault();
+        switchSection("inventory");
+    });
 }
-else if (currentPage === "search") {
-    initializeSearchPage();
-}
-else if (currentPage === "inventory") {
-    initializeInventoryPage();
-}
+initializeManagementSection();
+initializeSearchSection();
+initializeInventorySection();
+initializeNavigation();
+switchSection("management");
