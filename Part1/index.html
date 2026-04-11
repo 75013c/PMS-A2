@@ -54,12 +54,12 @@
             <div class="grid">
               <div class="field">
                 <label for="addItemId">Item ID *</label>
-                <input type="text" id="addItemId" maxlength="20" />
+                <input type="text" id="addItemId" maxlength="20" placeholder="Enter Unique String" />
               </div>
 
               <div class="field">
                 <label for="addItemName">Item Name *</label>
-                <input type="text" id="addItemName" maxlength="60" />
+                <input type="text" id="addItemName" maxlength="60" placeholder="Enter String" />
               </div>
 
               <div class="field">
@@ -76,17 +76,17 @@
 
               <div class="field">
                 <label for="addQuantity">Quantity *</label>
-                <input type="number" id="addQuantity" min="0" />
+                <input type="number" id="addQuantity" min="0" step="1" placeholder="Enter Integer" />
               </div>
 
               <div class="field">
                 <label for="addPrice">Price *</label>
-                <input type="number" id="addPrice" min="0" step="0.01" />
+                <input type="number" id="addPrice" min="0" step="1" placeholder="Enter Float" />
               </div>
 
               <div class="field">
                 <label for="addSupplierName">Supplier Name *</label>
-                <input type="text" id="addSupplierName" maxlength="60" />
+                <input type="text" id="addSupplierName" maxlength="60" placeholder="Enter String" />
               </div>
 
               <div class="field">
@@ -110,7 +110,7 @@
 
               <div class="field full-width">
                 <label for="addComment">Comment on Item</label>
-                <textarea id="addComment" rows="3" maxlength="200"></textarea>
+                <textarea id="addComment" rows="3" maxlength="200" placeholder="Enter String" ></textarea>
               </div>
             </div>
 
@@ -134,7 +134,7 @@
           <div class="lookup-box">
             <div class="field">
               <label for="loadItemName">Enter Name to Load Item Information *</label>
-              <input type="text" id="loadItemName" maxlength="60" />
+              <input type="text" id="loadItemName" maxlength="60" placeholder="Enter String" />
             </div>
 
             <div class="button-row">
@@ -168,12 +168,12 @@
 
               <div class="field">
                 <label for="updateQuantity">Quantity *</label>
-                <input type="number" id="updateQuantity" min="0" />
+                <input type="number" id="updateQuantity" min="0" step="1" />
               </div>
 
               <div class="field">
                 <label for="updatePrice">Price *</label>
-                <input type="number" id="updatePrice" min="0" step="0.01" />
+                <input type="number" id="updatePrice" min="0" step="1" />
               </div>
 
               <div class="field">
@@ -221,7 +221,7 @@
           <div class="lookup-box">
             <div class="field">
               <label for="deleteItemName">Enter Name to Delete Items from Inventory *</label>
-              <input type="text" id="deleteItemName" maxlength="60" />
+              <input type="text" id="deleteItemName" maxlength="60" placeholder="Enter String" />
             </div>
 
             <div class="button-row form-actions">
@@ -252,7 +252,7 @@
 
         <div class="field">
           <p class="section-note search-note">Please enter a name to search item information.</p>
-          <input type="text" id="searchName" maxlength="60" />
+          <input type="text" id="searchName" maxlength="60" placeholder="Enter String" />
         </div>
 
         <div class="button-row">

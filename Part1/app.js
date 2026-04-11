@@ -1,6 +1,5 @@
-// 24832452 HongyuLiu
-
 "use strict";
+// 24832452 HongyuLiu
 const STORAGE_KEY = "inventory_session_data";
 const defaultInventory = [
     {

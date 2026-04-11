@@ -258,7 +258,6 @@ const deleteBtn = document.getElementById("deleteBtn") as HTMLButtonElement | nu
 
 const clearAddBtn = document.getElementById("clearAddBtn") as HTMLButtonElement | null;
 const clearUpdateBtn = document.getElementById("clearUpdateBtn") as HTMLButtonElement | null;
-const clearDeleteBtn = document.getElementById("clearDeleteBtn") as HTMLButtonElement | null;
 
 // confirmation
 const confirmBox = document.getElementById("confirmBox") as HTMLDivElement | null;
@@ -271,44 +270,79 @@ const formCard = document.getElementById("formCard") as HTMLElement | null;
 function validateForm(data: FormDataShape, isUpdate: boolean = false): string[] {
   const errors: string[] = [];
 
-  if (!isUpdate && data.itemId.trim() === "") {
+  const itemId = String(data.itemId ?? "").trim();
+  const itemName = String(data.itemName ?? "").trim();
+  const category = String(data.category ?? "").trim();
+  const quantityValue = String(data.quantity ?? "").trim();
+  const priceValue = String(data.price ?? "").trim();
+  const supplierName = String(data.supplierName ?? "").trim();
+  const stockStatus = String(data.stockStatus ?? "").trim();
+  const popularItem = String(data.popularItem ?? "").trim();
+
+  if (!isUpdate && itemId === "") {
     errors.push("Item ID is required.");
   }
 
-  if (data.itemName.trim() === "") {
+  if (itemName === "") {
     errors.push("Item Name is required.");
   }
 
-  if (data.category.trim() === "") {
+  if (category === "") {
     errors.push("Category is required.");
   }
 
-  if (data.quantity.trim() === "") {
+  if (quantityValue === "") {
     errors.push("Quantity is required.");
-  } else if (Number.isNaN(Number(data.quantity)) || Number(data.quantity) < 0) {
-    errors.push("Quantity must be a number greater than or equal to 0.");
+  } else {
+    const quantityNumber = Number(quantityValue);
+
+    if (!Number.isInteger(quantityNumber) || quantityNumber < 0) {
+      errors.push("Quantity must be a whole number greater than or equal to 0.");
+    }
   }
 
-  if (data.price.trim() === "") {
+  if (priceValue === "") {
     errors.push("Price is required.");
-  } else if (Number.isNaN(Number(data.price)) || Number(data.price) < 0) {
-    errors.push("Price must be a number greater than or equal to 0.");
+  } else {
+    const priceNumber = Number(priceValue);
+
+    if (!Number.isFinite(priceNumber) || priceNumber < 0) {
+      errors.push("Price must be a number greater than or equal to 0.");
+    }
   }
 
-  if (data.supplierName.trim() === "") {
+  if (supplierName === "") {
     errors.push("Supplier Name is required.");
   }
 
-  if (data.stockStatus.trim() === "") {
+  if (stockStatus === "") {
     errors.push("Stock Status is required.");
   }
 
-  if (data.popularItem.trim() === "") {
+  if (popularItem === "") {
     errors.push("Popular Item is required.");
   }
 
   return errors;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getAddFormData(): FormDataShape {
   return {
@@ -581,11 +615,6 @@ function initializeManagementSection(): void {
 
   clearUpdateBtn?.addEventListener("click", (): void => {
     clearUpdateForm();
-    clearMessage(managementMessageBox);
-  });
-
-  clearDeleteBtn?.addEventListener("click", (): void => {
-    clearDeleteForm();
     clearMessage(managementMessageBox);
   });
 

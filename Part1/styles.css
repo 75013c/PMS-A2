@@ -226,11 +226,6 @@ textarea {
   filter: brightness(1.05);
 }
 
-
-
-
-
-
 .message {
   min-height: 24px;
   margin-bottom: 12px;
@@ -356,7 +351,6 @@ td {
   margin: 8px 0 12px;
 }
 
-
 .action-grid {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -466,7 +460,6 @@ input[readonly] {
 #updateForm {
   margin-top: 16px;
 }
-
 
 .empty-state {
   text-align: center;
