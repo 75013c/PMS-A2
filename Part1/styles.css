@@ -505,3 +505,104 @@ input[readonly] {
     font-size: 14px;
   }
 }
+
+/* =========================
+   Mobile Responsive Improvement
+   ========================= */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px 12px 0;
+  }
+
+  .card {
+    padding: 14px 18px;
+  }
+
+  .navbar {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+
+  .navbar a {
+    min-width: 100%;
+    font-size: 18px;
+    padding: 12px 16px;
+  }
+
+  .button-row {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .button-row button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .action-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .action-btn {
+    width: 100%;
+    font-size: 20px;
+  }
+
+  #loadItemName,
+  #deleteItemName,
+  #searchName {
+    width: 100%;
+  }
+
+  th,
+  td {
+    padding: 8px 6px;
+    font-size: 14px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .card {
+    padding: 12px 14px;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 14px;
+  }
+
+  .navbar a {
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+
+  .action-btn,
+  .button-row button {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .results-info {
+    font-size: 15px;
+  }
+}
