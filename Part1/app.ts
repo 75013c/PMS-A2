@@ -1,9 +1,11 @@
 // 24832452 HongyuLiu
 
+// Type definitions for constrained field values
 type Category = "Electronics" | "Furniture" | "Clothing" | "Tools" | "Miscellaneous";
 type StockStatus = "In Stock" | "Low Stock" | "Out of Stock";
 type PopularItem = "Yes" | "No";
 
+// Inventory item data model
 interface InventoryItem {
   itemId: string;
   itemName: string;
@@ -16,6 +18,7 @@ interface InventoryItem {
   comment: string;
 }
 
+// Form data model used before conversion to typed inventory items
 interface FormDataShape {
   itemId: string;
   itemName: string;
@@ -28,8 +31,10 @@ interface FormDataShape {
   comment: string;
 }
 
+// Session storage key for inventory persistence
 const STORAGE_KEY = "inventory_session_data";
 
+// Default inventory records loaded when no session data exists
 const defaultInventory: InventoryItem[] = [
   {
     itemId: "E1001",
@@ -88,6 +93,7 @@ const defaultInventory: InventoryItem[] = [
   }
 ];
 
+// Load inventory data from session storage or initialize with default data
 function loadInventory(): InventoryItem[] {
   const saved: string | null = sessionStorage.getItem(STORAGE_KEY);
 
@@ -99,19 +105,23 @@ function loadInventory(): InventoryItem[] {
   return [...defaultInventory];
 }
 
+// Global inventory state and temporary operation state
 let inventory: InventoryItem[] = loadInventory();
 let currentEditingItemName: string = "";
 let pendingDeleteName: string = "";
 
 // ---------- Navigation ----------
+// Navigation links
 const navManagement = document.getElementById("navManagement") as HTMLAnchorElement | null;
 const navSearch = document.getElementById("navSearch") as HTMLAnchorElement | null;
 const navInventory = document.getElementById("navInventory") as HTMLAnchorElement | null;
 
+// Main page sections
 const managementSection = document.getElementById("managementSection") as HTMLElement | null;
 const searchSection = document.getElementById("searchSection") as HTMLElement | null;
 const inventorySection = document.getElementById("inventorySection") as HTMLElement | null;
 
+// Switch between main sections and update active navigation state
 function switchSection(section: "management" | "search" | "inventory"): void {
   managementSection?.classList.add("hidden");
   searchSection?.classList.add("hidden");
@@ -135,22 +145,27 @@ function switchSection(section: "management" | "search" | "inventory"): void {
 }
 
 // ---------- Global helpers ----------
+// Save current inventory data to session storage
 function saveData(): void {
   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
 }
 
+// Normalize strings for case-insensitive and trimmed comparisons
 function normalise(name: string): string {
   return name.trim().toLowerCase();
 }
 
+// Find an inventory item by item name
 function findItemByName(name: string): InventoryItem | undefined {
   return inventory.find((item: InventoryItem): boolean => normalise(item.itemName) === normalise(name));
 }
 
+// Find the index of an inventory item by item name
 function findIndexByName(name: string): number {
   return inventory.findIndex((item: InventoryItem): boolean => normalise(item.itemName) === normalise(name));
 }
 
+// Return HTML badge markup for stock status
 function getStockBadge(status: StockStatus): string {
   if (status === "In Stock") {
     return `<span class="badge badge-green">${status}</span>`;
@@ -163,6 +178,7 @@ function getStockBadge(status: StockStatus): string {
   return `<span class="badge badge-red">${status}</span>`;
 }
 
+// Render inventory items into a table body
 function renderItems(items: InventoryItem[], tableBody: HTMLTableSectionElement | null): void {
   if (!tableBody) {
     return;
@@ -196,6 +212,7 @@ function renderItems(items: InventoryItem[], tableBody: HTMLTableSectionElement 
     .join("");
 }
 
+// Show a styled message in a message box
 function showMessage(box: HTMLDivElement | null, message: string, type: "success" | "error" | "info"): void {
   if (!box) {
     return;
@@ -205,6 +222,7 @@ function showMessage(box: HTMLDivElement | null, message: string, type: "success
   box.innerHTML = message;
 }
 
+// Clear message content and state
 function clearMessage(box: HTMLDivElement | null): void {
   if (!box) {
     return;
@@ -214,6 +232,7 @@ function clearMessage(box: HTMLDivElement | null): void {
   box.innerHTML = "";
 }
 
+// Update plain text result information
 function updateResultsInfo(box: HTMLDivElement | null, text: string): void {
   if (!box) {
     return;
@@ -225,17 +244,20 @@ function updateResultsInfo(box: HTMLDivElement | null, text: string): void {
 // ==================================================
 // MANAGEMENT SECTION
 // ==================================================
+// Message area for management operations
 const managementMessageBox = document.getElementById("managementMessageBox") as HTMLDivElement | null;
 
+// Management panels
 const addPanel = document.getElementById("addPanel") as HTMLDivElement | null;
 const updatePanel = document.getElementById("updatePanel") as HTMLDivElement | null;
 const deletePanel = document.getElementById("deletePanel") as HTMLDivElement | null;
 
+// Panel toggle buttons
 const showAddPanelBtn = document.getElementById("showAddPanelBtn") as HTMLButtonElement | null;
 const showUpdatePanelBtn = document.getElementById("showUpdatePanelBtn") as HTMLButtonElement | null;
 const showDeletePanelBtn = document.getElementById("showDeletePanelBtn") as HTMLButtonElement | null;
 
-// add inputs
+// Add form inputs
 const addItemIdInput = document.getElementById("addItemId") as HTMLInputElement | null;
 const addItemNameInput = document.getElementById("addItemName") as HTMLInputElement | null;
 const addCategoryInput = document.getElementById("addCategory") as HTMLSelectElement | null;
@@ -246,7 +268,7 @@ const addStockInput = document.getElementById("addStockStatus") as HTMLSelectEle
 const addPopularInput = document.getElementById("addPopularItem") as HTMLSelectElement | null;
 const addCommentInput = document.getElementById("addComment") as HTMLTextAreaElement | null;
 
-// update inputs
+// Update form inputs
 const loadItemNameInput = document.getElementById("loadItemName") as HTMLInputElement | null;
 const updateItemIdInput = document.getElementById("updateItemId") as HTMLInputElement | null;
 const updateItemNameInput = document.getElementById("updateItemName") as HTMLInputElement | null;
@@ -258,10 +280,10 @@ const updateStockInput = document.getElementById("updateStockStatus") as HTMLSel
 const updatePopularInput = document.getElementById("updatePopularItem") as HTMLSelectElement | null;
 const updateCommentInput = document.getElementById("updateComment") as HTMLTextAreaElement | null;
 
-// delete input
+// Delete form input
 const deleteItemNameInput = document.getElementById("deleteItemName") as HTMLInputElement | null;
 
-// buttons
+// Management buttons
 const addBtn = document.getElementById("addBtn") as HTMLButtonElement | null;
 const editBtn = document.getElementById("editBtn") as HTMLButtonElement | null;
 const updateBtn = document.getElementById("updateBtn") as HTMLButtonElement | null;
@@ -270,14 +292,16 @@ const deleteBtn = document.getElementById("deleteBtn") as HTMLButtonElement | nu
 const clearAddBtn = document.getElementById("clearAddBtn") as HTMLButtonElement | null;
 const clearUpdateBtn = document.getElementById("clearUpdateBtn") as HTMLButtonElement | null;
 
-// confirmation
+// Delete confirmation elements
 const confirmBox = document.getElementById("confirmBox") as HTMLDivElement | null;
 const confirmText = document.getElementById("confirmText") as HTMLDivElement | null;
 const confirmYesBtn = document.getElementById("confirmYesBtn") as HTMLButtonElement | null;
 const confirmNoBtn = document.getElementById("confirmNoBtn") as HTMLButtonElement | null;
 
+// Shared card that contains add / update / delete forms
 const formCard = document.getElementById("formCard") as HTMLElement | null;
 
+// Validate form data before add or update operations
 function validateForm(data: FormDataShape, isUpdate: boolean = false): string[] {
   const errors: string[] = [];
 
@@ -337,24 +361,7 @@ function validateForm(data: FormDataShape, isUpdate: boolean = false): string[] 
   return errors;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Collect values from the add form
 function getAddFormData(): FormDataShape {
   return {
     itemId: addItemIdInput?.value.trim() ?? "",
@@ -369,6 +376,7 @@ function getAddFormData(): FormDataShape {
   };
 }
 
+// Collect values from the update form
 function getUpdateFormData(): FormDataShape {
   return {
     itemId: updateItemIdInput?.value.trim() ?? "",
@@ -383,6 +391,7 @@ function getUpdateFormData(): FormDataShape {
   };
 }
 
+// Convert form data into a typed inventory item object
 function toInventoryItem(data: FormDataShape, existingId?: string): InventoryItem {
   return {
     itemId: existingId ?? data.itemId,
@@ -397,6 +406,7 @@ function toInventoryItem(data: FormDataShape, existingId?: string): InventoryIte
   };
 }
 
+// Clear all fields in the add form
 function clearAddForm(): void {
   if (addItemIdInput) addItemIdInput.value = "";
   if (addItemNameInput) addItemNameInput.value = "";
@@ -409,6 +419,7 @@ function clearAddForm(): void {
   if (addCommentInput) addCommentInput.value = "";
 }
 
+// Clear all fields in the update form
 function clearUpdateForm(): void {
   if (loadItemNameInput) loadItemNameInput.value = "";
   if (updateItemIdInput) updateItemIdInput.value = "";
@@ -423,12 +434,14 @@ function clearUpdateForm(): void {
   currentEditingItemName = "";
 }
 
+// Clear the delete input field
 function clearDeleteForm(): void {
   if (deleteItemNameInput) {
     deleteItemNameInput.value = "";
   }
 }
 
+// Show the selected management panel and update button state
 function setPanel(type: "add" | "update" | "delete"): void {
   addPanel?.classList.add("hidden");
   updatePanel?.classList.add("hidden");
@@ -454,6 +467,7 @@ function setPanel(type: "add" | "update" | "delete"): void {
   clearMessage(managementMessageBox);
 }
 
+// Add a new item to the inventory
 function addItem(): void {
   clearMessage(managementMessageBox);
 
@@ -481,6 +495,7 @@ function addItem(): void {
   showMessage(managementMessageBox, `Item <strong>${data.itemName}</strong> added successfully.`, "success");
 }
 
+// Load an existing item into the update form
 function loadItem(): void {
   clearMessage(managementMessageBox);
 
@@ -513,6 +528,7 @@ function loadItem(): void {
   showMessage(managementMessageBox, `Item <strong>${item.itemName}</strong> loaded for editing.`, "info");
 }
 
+// Update an existing inventory item
 function updateItem(): void {
   clearMessage(managementMessageBox);
 
@@ -555,6 +571,7 @@ function updateItem(): void {
   showMessage(managementMessageBox, `Item <strong>${inventory[index].itemName}</strong> updated successfully.`, "success");
 }
 
+// Start the delete process by validating the selected item
 function requestDelete(): void {
   clearMessage(managementMessageBox);
 
@@ -580,6 +597,7 @@ function requestDelete(): void {
   }
 }
 
+// Confirm and complete the delete operation
 function confirmDelete(): void {
   const index: number = findIndexByName(pendingDeleteName);
 
@@ -597,6 +615,7 @@ function confirmDelete(): void {
   showMessage(managementMessageBox, `Item <strong>${deletedName}</strong> deleted successfully.`, "success");
 }
 
+// Close the delete confirmation dialog
 function closeConfirmation(): void {
   pendingDeleteName = "";
 
@@ -609,6 +628,7 @@ function closeConfirmation(): void {
   }
 }
 
+// Set up management section event listeners
 function initializeManagementSection(): void {
   showAddPanelBtn?.addEventListener("click", (): void => setPanel("add"));
   showUpdatePanelBtn?.addEventListener("click", (): void => setPanel("update"));
@@ -638,6 +658,7 @@ function initializeManagementSection(): void {
 // ==================================================
 // SEARCH SECTION
 // ==================================================
+// Search section elements
 const searchMessageBox = document.getElementById("searchMessageBox") as HTMLDivElement | null;
 const searchResultsInfo = document.getElementById("searchResultsInfo") as HTMLDivElement | null;
 const searchTableBody = document.getElementById("searchTableBody") as HTMLTableSectionElement | null;
@@ -646,6 +667,7 @@ const searchNameInput = document.getElementById("searchName") as HTMLInputElemen
 const searchBtn = document.getElementById("searchBtn") as HTMLButtonElement | null;
 const clearSearchBtn = document.getElementById("clearSearchBtn") as HTMLButtonElement | null;
 
+// Search items by item name keyword
 function searchItem(): void {
   clearMessage(searchMessageBox);
 
@@ -670,6 +692,7 @@ function searchItem(): void {
   }
 }
 
+// Clear search input and search results
 function clearSearch(): void {
   if (searchNameInput) {
     searchNameInput.value = "";
@@ -680,6 +703,7 @@ function clearSearch(): void {
   updateResultsInfo(searchResultsInfo, "No search performed yet.");
 }
 
+// Set up search section event listeners
 function initializeSearchSection(): void {
   searchBtn?.addEventListener("click", searchItem);
   clearSearchBtn?.addEventListener("click", clearSearch);
@@ -691,6 +715,7 @@ function initializeSearchSection(): void {
 // ==================================================
 // INVENTORY SECTION
 // ==================================================
+// Inventory section elements
 const inventoryMessageBox = document.getElementById("inventoryMessageBox") as HTMLDivElement | null;
 const inventoryResultsInfo = document.getElementById("inventoryResultsInfo") as HTMLDivElement | null;
 const inventoryTableBody = document.getElementById("inventoryTableBody") as HTMLTableSectionElement | null;
@@ -698,12 +723,14 @@ const inventoryTableBody = document.getElementById("inventoryTableBody") as HTML
 const showAllBtn = document.getElementById("showAllBtn") as HTMLButtonElement | null;
 const showPopularBtn = document.getElementById("showPopularBtn") as HTMLButtonElement | null;
 
+// Show all inventory items
 function showAllItems(): void {
   clearMessage(inventoryMessageBox);
   renderItems(inventory, inventoryTableBody);
   updateResultsInfo(inventoryResultsInfo, `Displaying all ${inventory.length} item(s).`);
 }
 
+// Show only popular items
 function showPopularItems(): void {
   clearMessage(inventoryMessageBox);
 
@@ -719,6 +746,7 @@ function showPopularItems(): void {
   }
 }
 
+// Set up inventory section event listeners
 function initializeInventorySection(): void {
   showAllBtn?.addEventListener("click", showAllItems);
   showPopularBtn?.addEventListener("click", showPopularItems);
@@ -729,6 +757,7 @@ function initializeInventorySection(): void {
 // ==================================================
 // APP START
 // ==================================================
+// Set up navigation event listeners
 function initializeNavigation(): void {
   navManagement?.addEventListener("click", (event: MouseEvent): void => {
     event.preventDefault();
@@ -746,6 +775,7 @@ function initializeNavigation(): void {
   });
 }
 
+// Initialize all sections and show the default section
 initializeManagementSection();
 initializeSearchSection();
 initializeInventorySection();

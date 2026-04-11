@@ -1,0 +1,114 @@
+<section id="helpSection" [class.hidden]="currentSection !== 'help'">
+  <section class="card help-hero-card">
+    <div class="help-hero-content">
+      <h2 class="help-main-title">Help and Support</h2>
+      <p class="help-main-text">
+        This page provides frequently asked questions and troubleshooting guidance for the
+        Inventory Management System. It helps users understand common issues and how to solve them.
+      </p>
+    </div>
+  </section>
+
+  <section class="card help-card">
+    <h2 class="help-section-title">Frequently Asked Questions</h2>
+
+    <div class="help-faq-list">
+      <div class="help-faq-card">
+        <h3 class="help-card-title">How do I add a new item?</h3>
+        <p class="help-card-text">
+          Open the Item Management page, choose <strong>Add Item</strong>, complete the form,
+          and click <strong>Save Item</strong>.
+        </p>
+      </div>
+
+      <div class="help-faq-card">
+        <h3 class="help-card-title">How do I update an item?</h3>
+        <p class="help-card-text">
+          On the Item Management page, choose <strong>Edit Item</strong>, enter the item name,
+          click <strong>Load Info</strong>, make the changes, and then click <strong>Update Item</strong>.
+        </p>
+      </div>
+
+      <div class="help-faq-card">
+        <h3 class="help-card-title">How do I delete an item?</h3>
+        <p class="help-card-text">
+          Choose <strong>Delete Item</strong> in Item Management, enter the item name,
+          click <strong>Delete Item</strong>, and confirm the action in the confirmation box.
+        </p>
+      </div>
+
+      <div class="help-faq-card">
+        <h3 class="help-card-title">How do I search for an item?</h3>
+        <p class="help-card-text">
+          Go to the Search Item page, enter the item name, and click <strong>Search</strong>
+          to display matching results.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card help-card">
+    <h2 class="help-section-title">Troubleshooting Guidance</h2>
+
+    <div class="help-trouble-grid">
+      <div class="help-trouble-card">
+        <h3 class="help-card-title">The item cannot be added</h3>
+        <p class="help-card-text">
+          Check that all required fields have values. Make sure the Item ID is unique and the Item Name
+          does not already exist in the system.
+        </p>
+      </div>
+
+      <div class="help-trouble-card">
+        <h3 class="help-card-title">The search returns no result</h3>
+        <p class="help-card-text">
+          Make sure the item name is spelled correctly. Try using a shorter keyword or check whether
+          the item has been added to the inventory.
+        </p>
+      </div>
+
+      <div class="help-trouble-card">
+        <h3 class="help-card-title">Changes are not saved permanently</h3>
+        <p class="help-card-text">
+          This application uses browser session storage. Data may be cleared when the browser session ends,
+          so the information is not stored permanently like a database system.
+        </p>
+      </div>
+
+      <div class="help-trouble-card">
+        <h3 class="help-card-title">The layout looks crowded on small screens</h3>
+        <p class="help-card-text">
+          Resize the browser window or use a larger screen width. The application supports responsive layout,
+          but some sections may appear more compact on smaller devices.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card help-card">
+    <h2 class="help-section-title">Additional Guidance</h2>
+
+    <div class="help-links-box">
+      <p class="help-card-text">
+        For general browser support and web application guidance, you may also refer to:
+      </p>
+      <ul class="help-link-list">
+        <li>
+          <a href="https://support.google.com/chrome/" target="_blank" rel="noopener noreferrer">
+            Google Chrome Help
+          </a>
+        </li>
+        <li>
+          <a href="https://support.microsoft.com/microsoft-edge" target="_blank" rel="noopener noreferrer">
+            Microsoft Edge Support
+          </a>
+        </li>
+        <li>
+          <a href="https://developer.mozilla.org/" target="_blank" rel="noopener noreferrer">
+            MDN Web Docs
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</section>

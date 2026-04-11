@@ -1,13 +1,16 @@
 /* 24832452 HongyuLiu */
 
+/* Apply border-box sizing to all elements */
 * {
   box-sizing: border-box;
 }
 
+/* Always reserve space for the vertical scrollbar */
 html {
   overflow-y: scroll;
 }
 
+/* Basic page styling */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -15,18 +18,21 @@ body {
   color: #1f2937;
 }
 
+/* Main content container */
 .container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 16px 16px 0;
 }
 
+/* Header area */
 .header {
   text-align: center;
   background: #fdfeff;
   padding: 16px;
 }
 
+/* Main page title */
 h1 {
   margin: 0;
   font-size: 30px;
@@ -35,6 +41,7 @@ h1 {
   color: #000;
 }
 
+/* Section title */
 h2 {
   margin-top: 15px;
   text-align: center;
@@ -42,6 +49,7 @@ h2 {
   font-weight: 600;
 }
 
+/* Navigation bar container */
 .navbar {
   width: 100%;
   display: flex;
@@ -56,6 +64,7 @@ h2 {
   margin-bottom: 10px;
 }
 
+/* Navigation links */
 .navbar a {
   color: #ffffff;
   text-decoration: none;
@@ -73,6 +82,7 @@ h2 {
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
 }
 
+/* Navigation link hover effect */
 .navbar a:hover {
   background: #0d3fc7;
   transform: translateY(-1px);
@@ -80,6 +90,7 @@ h2 {
   filter: brightness(1.05);
 }
 
+/* Active navigation link style */
 .navbar a.active {
   background: #0b37af;
   color: #ffffff;
@@ -88,8 +99,7 @@ h2 {
   filter: brightness(1.05);
 }
 
-
-
+/* Generic content card */
 .card {
   background: #ffffff;
   padding: 14px 40px;
@@ -98,28 +108,33 @@ h2 {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.card p{
+/* Paragraphs inside cards */
+.card p {
   text-align: center;
   font-size: 18px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
+/* Two-column grid layout */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
 
+/* Form field container */
 .field {
   display: flex;
   flex-direction: column;
 }
 
+/* Full-width grid item */
 .full-width {
   grid-column: 1 / -1;
 }
 
+/* Form labels */
 label {
   font-weight: 500;
   font-size: 18px;
@@ -127,6 +142,7 @@ label {
   margin: 5px 0 15px;
 }
 
+/* Base font size for form controls and buttons */
 input,
 select,
 textarea,
@@ -134,6 +150,7 @@ button {
   font-size: 15px;
 }
 
+/* Shared input, select, and textarea styling */
 input,
 select,
 textarea {
@@ -145,10 +162,12 @@ textarea {
   background: #fff;
 }
 
+/* Allow textarea vertical resizing only */
 textarea {
   resize: vertical;
 }
 
+/* Button row layout */
 .button-row {
   display: flex;
   justify-content: center;
@@ -157,6 +176,7 @@ textarea {
   margin-top: 14px;
 }
 
+/* Buttons inside a button row */
 .button-row button {
   border: none;
   border-radius: 8px;
@@ -171,10 +191,12 @@ textarea {
   color: white;
 }
 
+/* Clear button style */
 .clear-btn {
   background: #e1ba1d;
 }
 
+/* Add bottom spacing for specific action buttons */
 #searchBtn,
 #showPopularBtn,
 #showAllBtn,
@@ -182,6 +204,7 @@ textarea {
   margin-bottom: 10px;
 }
 
+/* Clear button hover effect */
 .clear-btn:hover {
   background: #eab308;
   transform: translateY(-1px);
@@ -189,12 +212,13 @@ textarea {
   filter: brightness(1.05);
 }
 
-
+/* Add / save button style */
 .add-save-btn {
   background: #168c41;
   /* color: #ffffff; */
 }
 
+/* Add / save button hover effect */
 .add-save-btn:hover {
   background: #16a149;
   transform: translateY(-1px);
@@ -202,11 +226,13 @@ textarea {
   filter: brightness(1.05);
 }
 
+/* Update button style */
 .update-save-btn {
   background: #214dac;
   /* color: #ffffff; */
 }
 
+/* Update button hover effect */
 .update-save-btn:hover {
   background: #2a5adf;
   transform: translateY(-1px);
@@ -214,11 +240,13 @@ textarea {
   filter: brightness(1.05);
 }
 
+/* Delete action button style */
 .delete-action-btn {
   background: #ae1c1c;
   /* color: #ffffff; */
 }
 
+/* Delete action button hover effect */
 .delete-action-btn:hover {
   background: #c21b1b;
   transform: translateY(-1px);
@@ -226,6 +254,7 @@ textarea {
   filter: brightness(1.05);
 }
 
+/* Message box base style */
 .message {
   min-height: 24px;
   margin-bottom: 12px;
@@ -234,24 +263,28 @@ textarea {
   display: none;
 }
 
+/* Success message style */
 .message.success {
   display: block;
   background: #dcfce7;
   color: #166534;
 }
 
+/* Error message style */
 .message.error {
   display: block;
   background: #fee2e2;
   color: #991b1b;
 }
 
+/* Info message style */
 .message.info {
   display: block;
   background: #dbeafe;
   color: #1d4ed8;
 }
 
+/* Text above result tables */
 .results-info {
   text-align: center;
   margin-top: 3px;
@@ -261,16 +294,19 @@ textarea {
   font-size: 17px;
 }
 
+/* Wrapper for horizontally scrollable tables */
 .table-wrapper {
   overflow-x: auto;
 }
 
+/* Table base style */
 table {
   width: 100%;
   border-collapse: collapse;
   /* table-layout: fixed; */
 }
 
+/* Shared table cell styling */
 th,
 td {
   border: 1px solid #e5e7eb;
@@ -279,42 +315,50 @@ td {
   vertical-align: top;
 }
 
+/* Table header background */
 th {
   background: #eff6ff;
 }
 
-
+/* Table header alignment and weight */
 th {
   text-align: center;
   vertical-align: middle;
   font-weight: 600;
 }
 
+/* Table cell alignment */
 td {
   text-align: center;
   vertical-align: middle;
 }
 
+/* Extra bottom padding for result cards */
 .search-results-card {
   padding-bottom: 24px;
 }
 
+/* Hidden element utility */
 .hidden {
   display: none;
 }
 
+/* Panel top spacing */
 .panel {
   margin-top: 8px;
 }
 
+/* Force hidden panel to stay hidden */
 .panel.hidden {
   display: none !important;
 }
 
+/* Utility top gap */
 .top-gap {
   margin-top: 14px;
 }
 
+/* Badge base style */
 .badge {
   display: inline-block;
   padding: 4px 8px;
@@ -323,34 +367,41 @@ td {
   font-weight: 700;
 }
 
+/* Green badge */
 .badge-green {
   background: #dcfce7;
   color: #166534;
 }
 
+/* Yellow badge */
 .badge-yellow {
   background: #fef3c7;
   color: #92400e;
 }
 
+/* Red badge */
 .badge-red {
   background: #fee2e2;
   color: #991b1b;
 }
 
+/* Section helper note text */
 .section-note {
   line-height: 1.1;
   color: #848484;
 }
 
+/* Search note spacing */
 .section-note.search-note {
   margin: 8px 0 25px;
 }
 
+/* Inventory note spacing */
 .section-note.inventory-note {
   margin: 8px 0 12px;
 }
 
+/* Action button grid */
 .action-grid {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -359,6 +410,7 @@ td {
   margin-top: 20px;
 }
 
+/* Action button base style */
 .action-btn {
   width: 190px;
   min-height: 60px;
@@ -370,25 +422,29 @@ td {
   color: #ffffff;
   margin: 0 auto 10px;
   cursor: pointer;
-  transition: 
+  transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
     filter 0.22s ease,
     background-color 0.22s ease;
 }
 
+/* Add panel button color */
 #showAddPanelBtn {
   background: #4d8060;
 }
 
+/* Update panel button color */
 #showUpdatePanelBtn {
   background: #465c8b;
 }
 
+/* Delete panel button color */
 #showDeletePanelBtn {
   background: #8e2929;
 }
 
+/* Action button hover: shadow, glow, and slight lift */
 /* hover：阴影 + 浅色光效 + 悬浮 */
 .action-btn:hover {
   transform: translateY(-1px);
@@ -396,6 +452,7 @@ td {
   filter: brightness(1.08);
 }
 
+/* Active state: darker background */
 /* 选中状态：颜色加深 */
 #showAddPanelBtn.active-action {
   background: #14a84a;
@@ -409,6 +466,7 @@ td {
   background: #ca2525;
 }
 
+/* Stronger hover effect for active button */
 /* 选中时 hover 更明显一点 */
 .action-btn.active-action:hover {
   transform: translateY(-3px);
@@ -416,6 +474,7 @@ td {
   filter: brightness(1.12);
 }
 
+/* Lookup box style for load/delete sections */
 .lookup-box {
   text-align: center;
   background: #f0f0f0;
@@ -424,23 +483,27 @@ td {
   border-radius: 10px;
 }
 
+/* Read-only input appearance */
 input[readonly] {
   background: #ededed;
   color: #475569;
 }
 
+/* Specific width for load, delete, and search inputs */
 #loadItemName,
-#deleteItemName, 
+#deleteItemName,
 #searchName {
   width: 60%;
   margin: 0 auto;
   display: block;
 }
 
+/* Extra spacing below search input */
 #searchName {
   margin-bottom: 10px;
 }
 
+/* Delete confirmation box */
 #confirmBox {
   text-align: center;
   background: #f8dfdf;
@@ -451,16 +514,19 @@ input[readonly] {
   margin-bottom: 0;
 }
 
+/* Delete confirmation text spacing */
 #confirmText {
   margin-top: 5px;
   margin-bottom: 25px;
 
 }
 
+/* Top margin for update form */
 #updateForm {
   margin-top: 16px;
 }
 
+/* Empty table state text */
 .empty-state {
   text-align: center;
   /* padding: 18px 0; */
@@ -468,6 +534,7 @@ input[readonly] {
   font-weight: 500;
 }
 
+/* Tablet and small-screen layout adjustments */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -490,6 +557,7 @@ input[readonly] {
   }
 }
 
+/* Small mobile screen adjustments */
 @media (max-width: 480px) {
   h1 {
     font-size: 22px;
@@ -510,6 +578,7 @@ input[readonly] {
    Mobile Responsive Improvement
    ========================= */
 
+/* Improved mobile layout for medium screens */
 @media (max-width: 768px) {
   .container {
     padding: 12px 12px 0;
@@ -568,6 +637,7 @@ input[readonly] {
   }
 }
 
+/* Improved mobile layout for narrow screens */
 @media (max-width: 480px) {
   h1 {
     font-size: 24px;

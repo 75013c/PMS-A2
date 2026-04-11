@@ -1,0 +1,62 @@
+<section id="homeSection" [class.hidden]="currentSection !== 'home'">
+  <section class="card home-hero-card">
+    <div class="home-hero home-hero-single">
+      <div class="home-hero-text">
+        <h2 class="home-title">Welcome to the Inventory Management System</h2>
+        <p class="home-description">
+          This web application helps users manage and view inventory records in one system.
+        </p>
+      </div>
+    </div>
+
+    <div class="home-feature-grid">
+      <div class="home-info-card">
+        <h3 class="home-card-title">What this app does</h3>
+        <p class="home-card-text">
+          This system stores key information about inventory items.
+        </p>
+        <p class="home-card-text">
+          It supports managing, searching and displaying item information in a clear and organised way.
+        </p>
+      </div>
+
+      <div class="home-info-card">
+        <h3 class="home-card-title">Why this app is useful</h3>
+        <p class="home-card-text">
+          The interface of this application is clear and easy to use.
+        </p>
+        <p class="home-card-text">
+          Users can manage inventory of items proficiently after simple practice.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card home-inventory-card">
+    <div class="home-inventory-box">
+      <div class="home-inventory-header">
+        <h2 class="home-inventory-title">Current Inventory</h2>
+        <p class="home-inventory-subtitle">
+          A quick summary of the current inventory status.
+        </p>
+      </div>
+
+      <div class="home-stats-grid home-stats-grid-wide">
+        <div class="home-stat-card home-stat-card-categories">
+          <p class="home-stat-label">Item Categories</p>
+          <h3 class="home-stat-value">{{ totalCategoryCount }}</h3>
+        </div>
+
+        <div class="home-stat-card home-stat-card-records">
+          <p class="home-stat-label">Inventory Records</p>
+          <h3 class="home-stat-value">{{ totalItemCount }}</h3>
+        </div>
+
+        <div class="home-stat-card home-stat-card-quantity">
+          <p class="home-stat-label">Total Quantity</p>
+          <h3 class="home-stat-value">{{ totalQuantityCount }}</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

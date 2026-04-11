@@ -1,6 +1,10 @@
+// 24832452 HongyuLiu
+
 "use strict";
 // 24832452 HongyuLiu
+// Session storage key for inventory persistence
 const STORAGE_KEY = "inventory_session_data";
+// Default inventory records loaded when no session data exists
 const defaultInventory = [
     {
         itemId: "E1001",
@@ -58,6 +62,7 @@ const defaultInventory = [
         comment: "The best smartphone"
     }
 ];
+// Load inventory data from session storage or initialize with default data
 function loadInventory() {
     const saved = sessionStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -66,16 +71,20 @@ function loadInventory() {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultInventory));
     return [...defaultInventory];
 }
+// Global inventory state and temporary operation state
 let inventory = loadInventory();
 let currentEditingItemName = "";
 let pendingDeleteName = "";
 // ---------- Navigation ----------
+// Navigation links
 const navManagement = document.getElementById("navManagement");
 const navSearch = document.getElementById("navSearch");
 const navInventory = document.getElementById("navInventory");
+// Main page sections
 const managementSection = document.getElementById("managementSection");
 const searchSection = document.getElementById("searchSection");
 const inventorySection = document.getElementById("inventorySection");
+// Switch between main sections and update active navigation state
 function switchSection(section) {
     managementSection === null || managementSection === void 0 ? void 0 : managementSection.classList.add("hidden");
     searchSection === null || searchSection === void 0 ? void 0 : searchSection.classList.add("hidden");
@@ -98,18 +107,23 @@ function switchSection(section) {
     }
 }
 // ---------- Global helpers ----------
+// Save current inventory data to session storage
 function saveData() {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
 }
+// Normalize strings for case-insensitive and trimmed comparisons
 function normalise(name) {
     return name.trim().toLowerCase();
 }
+// Find an inventory item by item name
 function findItemByName(name) {
     return inventory.find((item) => normalise(item.itemName) === normalise(name));
 }
+// Find the index of an inventory item by item name
 function findIndexByName(name) {
     return inventory.findIndex((item) => normalise(item.itemName) === normalise(name));
 }
+// Return HTML badge markup for stock status
 function getStockBadge(status) {
     if (status === "In Stock") {
         return `<span class="badge badge-green">${status}</span>`;
@@ -119,6 +133,7 @@ function getStockBadge(status) {
     }
     return `<span class="badge badge-red">${status}</span>`;
 }
+// Render inventory items into a table body
 function renderItems(items, tableBody) {
     if (!tableBody) {
         return;
@@ -149,6 +164,7 @@ function renderItems(items, tableBody) {
     })
         .join("");
 }
+// Show a styled message in a message box
 function showMessage(box, message, type) {
     if (!box) {
         return;
@@ -156,6 +172,7 @@ function showMessage(box, message, type) {
     box.className = `message ${type}`;
     box.innerHTML = message;
 }
+// Clear message content and state
 function clearMessage(box) {
     if (!box) {
         return;
@@ -163,6 +180,7 @@ function clearMessage(box) {
     box.className = "message";
     box.innerHTML = "";
 }
+// Update plain text result information
 function updateResultsInfo(box, text) {
     if (!box) {
         return;
@@ -172,14 +190,17 @@ function updateResultsInfo(box, text) {
 // ==================================================
 // MANAGEMENT SECTION
 // ==================================================
+// Message area for management operations
 const managementMessageBox = document.getElementById("managementMessageBox");
+// Management panels
 const addPanel = document.getElementById("addPanel");
 const updatePanel = document.getElementById("updatePanel");
 const deletePanel = document.getElementById("deletePanel");
+// Panel toggle buttons
 const showAddPanelBtn = document.getElementById("showAddPanelBtn");
 const showUpdatePanelBtn = document.getElementById("showUpdatePanelBtn");
 const showDeletePanelBtn = document.getElementById("showDeletePanelBtn");
-// add inputs
+// Add form inputs
 const addItemIdInput = document.getElementById("addItemId");
 const addItemNameInput = document.getElementById("addItemName");
 const addCategoryInput = document.getElementById("addCategory");
@@ -189,7 +210,7 @@ const addSupplierInput = document.getElementById("addSupplierName");
 const addStockInput = document.getElementById("addStockStatus");
 const addPopularInput = document.getElementById("addPopularItem");
 const addCommentInput = document.getElementById("addComment");
-// update inputs
+// Update form inputs
 const loadItemNameInput = document.getElementById("loadItemName");
 const updateItemIdInput = document.getElementById("updateItemId");
 const updateItemNameInput = document.getElementById("updateItemName");
@@ -200,21 +221,23 @@ const updateSupplierInput = document.getElementById("updateSupplierName");
 const updateStockInput = document.getElementById("updateStockStatus");
 const updatePopularInput = document.getElementById("updatePopularItem");
 const updateCommentInput = document.getElementById("updateComment");
-// delete input
+// Delete form input
 const deleteItemNameInput = document.getElementById("deleteItemName");
-// buttons
+// Management buttons
 const addBtn = document.getElementById("addBtn");
 const editBtn = document.getElementById("editBtn");
 const updateBtn = document.getElementById("updateBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 const clearAddBtn = document.getElementById("clearAddBtn");
 const clearUpdateBtn = document.getElementById("clearUpdateBtn");
-// confirmation
+// Delete confirmation elements
 const confirmBox = document.getElementById("confirmBox");
 const confirmText = document.getElementById("confirmText");
 const confirmYesBtn = document.getElementById("confirmYesBtn");
 const confirmNoBtn = document.getElementById("confirmNoBtn");
+// Shared card that contains add / update / delete forms
 const formCard = document.getElementById("formCard");
+// Validate form data before add or update operations
 function validateForm(data, isUpdate = false) {
     var _a, _b, _c, _d, _e, _f, _g, _h;
     const errors = [];
@@ -264,6 +287,7 @@ function validateForm(data, isUpdate = false) {
     }
     return errors;
 }
+// Collect values from the add form
 function getAddFormData() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     return {
@@ -278,6 +302,7 @@ function getAddFormData() {
         comment: (_j = addCommentInput === null || addCommentInput === void 0 ? void 0 : addCommentInput.value.trim()) !== null && _j !== void 0 ? _j : ""
     };
 }
+// Collect values from the update form
 function getUpdateFormData() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     return {
@@ -292,6 +317,7 @@ function getUpdateFormData() {
         comment: (_j = updateCommentInput === null || updateCommentInput === void 0 ? void 0 : updateCommentInput.value.trim()) !== null && _j !== void 0 ? _j : ""
     };
 }
+// Convert form data into a typed inventory item object
 function toInventoryItem(data, existingId) {
     return {
         itemId: existingId !== null && existingId !== void 0 ? existingId : data.itemId,
@@ -305,6 +331,7 @@ function toInventoryItem(data, existingId) {
         comment: data.comment
     };
 }
+// Clear all fields in the add form
 function clearAddForm() {
     if (addItemIdInput)
         addItemIdInput.value = "";
@@ -325,6 +352,7 @@ function clearAddForm() {
     if (addCommentInput)
         addCommentInput.value = "";
 }
+// Clear all fields in the update form
 function clearUpdateForm() {
     if (loadItemNameInput)
         loadItemNameInput.value = "";
@@ -348,11 +376,13 @@ function clearUpdateForm() {
         updateCommentInput.value = "";
     currentEditingItemName = "";
 }
+// Clear the delete input field
 function clearDeleteForm() {
     if (deleteItemNameInput) {
         deleteItemNameInput.value = "";
     }
 }
+// Show the selected management panel and update button state
 function setPanel(type) {
     addPanel === null || addPanel === void 0 ? void 0 : addPanel.classList.add("hidden");
     updatePanel === null || updatePanel === void 0 ? void 0 : updatePanel.classList.add("hidden");
@@ -375,6 +405,7 @@ function setPanel(type) {
     }
     clearMessage(managementMessageBox);
 }
+// Add a new item to the inventory
 function addItem() {
     clearMessage(managementMessageBox);
     const data = getAddFormData();
@@ -396,6 +427,7 @@ function addItem() {
     clearAddForm();
     showMessage(managementMessageBox, `Item <strong>${data.itemName}</strong> added successfully.`, "success");
 }
+// Load an existing item into the update form
 function loadItem() {
     var _a;
     clearMessage(managementMessageBox);
@@ -430,6 +462,7 @@ function loadItem() {
         updateCommentInput.value = item.comment;
     showMessage(managementMessageBox, `Item <strong>${item.itemName}</strong> loaded for editing.`, "info");
 }
+// Update an existing inventory item
 function updateItem() {
     clearMessage(managementMessageBox);
     if (currentEditingItemName === "") {
@@ -459,6 +492,7 @@ function updateItem() {
     saveData();
     showMessage(managementMessageBox, `Item <strong>${inventory[index].itemName}</strong> updated successfully.`, "success");
 }
+// Start the delete process by validating the selected item
 function requestDelete() {
     var _a;
     clearMessage(managementMessageBox);
@@ -478,6 +512,7 @@ function requestDelete() {
         confirmBox.classList.remove("hidden");
     }
 }
+// Confirm and complete the delete operation
 function confirmDelete() {
     const index = findIndexByName(pendingDeleteName);
     if (index === -1) {
@@ -492,6 +527,7 @@ function confirmDelete() {
     closeConfirmation();
     showMessage(managementMessageBox, `Item <strong>${deletedName}</strong> deleted successfully.`, "success");
 }
+// Close the delete confirmation dialog
 function closeConfirmation() {
     pendingDeleteName = "";
     if (confirmBox) {
@@ -501,6 +537,7 @@ function closeConfirmation() {
         confirmText.innerHTML = "";
     }
 }
+// Set up management section event listeners
 function initializeManagementSection() {
     showAddPanelBtn === null || showAddPanelBtn === void 0 ? void 0 : showAddPanelBtn.addEventListener("click", () => setPanel("add"));
     showUpdatePanelBtn === null || showUpdatePanelBtn === void 0 ? void 0 : showUpdatePanelBtn.addEventListener("click", () => setPanel("update"));
@@ -524,12 +561,14 @@ function initializeManagementSection() {
 // ==================================================
 // SEARCH SECTION
 // ==================================================
+// Search section elements
 const searchMessageBox = document.getElementById("searchMessageBox");
 const searchResultsInfo = document.getElementById("searchResultsInfo");
 const searchTableBody = document.getElementById("searchTableBody");
 const searchNameInput = document.getElementById("searchName");
 const searchBtn = document.getElementById("searchBtn");
 const clearSearchBtn = document.getElementById("clearSearchBtn");
+// Search items by item name keyword
 function searchItem() {
     var _a;
     clearMessage(searchMessageBox);
@@ -548,6 +587,7 @@ function searchItem() {
         showMessage(searchMessageBox, `Search completed for <strong>${keyword}</strong>.`, "success");
     }
 }
+// Clear search input and search results
 function clearSearch() {
     if (searchNameInput) {
         searchNameInput.value = "";
@@ -556,6 +596,7 @@ function clearSearch() {
     renderItems([], searchTableBody);
     updateResultsInfo(searchResultsInfo, "No search performed yet.");
 }
+// Set up search section event listeners
 function initializeSearchSection() {
     searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", searchItem);
     clearSearchBtn === null || clearSearchBtn === void 0 ? void 0 : clearSearchBtn.addEventListener("click", clearSearch);
@@ -565,16 +606,19 @@ function initializeSearchSection() {
 // ==================================================
 // INVENTORY SECTION
 // ==================================================
+// Inventory section elements
 const inventoryMessageBox = document.getElementById("inventoryMessageBox");
 const inventoryResultsInfo = document.getElementById("inventoryResultsInfo");
 const inventoryTableBody = document.getElementById("inventoryTableBody");
 const showAllBtn = document.getElementById("showAllBtn");
 const showPopularBtn = document.getElementById("showPopularBtn");
+// Show all inventory items
 function showAllItems() {
     clearMessage(inventoryMessageBox);
     renderItems(inventory, inventoryTableBody);
     updateResultsInfo(inventoryResultsInfo, `Displaying all ${inventory.length} item(s).`);
 }
+// Show only popular items
 function showPopularItems() {
     clearMessage(inventoryMessageBox);
     const popularItems = inventory.filter((item) => item.popularItem === "Yes");
@@ -584,6 +628,7 @@ function showPopularItems() {
         showMessage(inventoryMessageBox, "There are no popular items in the database.", "info");
     }
 }
+// Set up inventory section event listeners
 function initializeInventorySection() {
     showAllBtn === null || showAllBtn === void 0 ? void 0 : showAllBtn.addEventListener("click", showAllItems);
     showPopularBtn === null || showPopularBtn === void 0 ? void 0 : showPopularBtn.addEventListener("click", showPopularItems);
@@ -592,6 +637,7 @@ function initializeInventorySection() {
 // ==================================================
 // APP START
 // ==================================================
+// Set up navigation event listeners
 function initializeNavigation() {
     navManagement === null || navManagement === void 0 ? void 0 : navManagement.addEventListener("click", (event) => {
         event.preventDefault();
@@ -606,6 +652,7 @@ function initializeNavigation() {
         switchSection("inventory");
     });
 }
+// Initialize all sections and show the default section
 initializeManagementSection();
 initializeSearchSection();
 initializeInventorySection();

@@ -1,0 +1,69 @@
+<section id="securitySection" [class.hidden]="currentSection !== 'security'">
+  <section class="card security-hero-card">
+    <div class="security-hero-content">
+      <h2 class="security-main-title">Privacy and Security Analysis</h2>
+      <p class="security-main-text">
+        This page explains privacy and security considerations of the Inventory Management System.
+        <br>
+        It explains how the application protects data accuracy, reduces avoidable risks and helps users
+        understand important system limitations.
+      </p>
+    </div>
+  </section>
+
+  <section class="card security-card">
+    <h2 class="security-section-title">Key Privacy and Security Requirements</h2>
+
+    <div class="security-requirements security-requirements-horizontal">
+      <div class="security-requirement-card">
+        <div>
+          <h3 class="security-card-title">Reduce incorrect changes</h3>
+          <p class="security-card-text">
+            The system could minimise incorrect user input and prevent accidental deletion
+            through validation and confirmation mechanisms.
+          </p>
+        </div>
+      </div>
+
+      <div class="security-requirement-card">
+        <div>
+          <h3 class="security-card-title">Limit privacy exposure</h3>
+          <p class="security-card-text">
+            The application avoids collecting unnecessary personal information and only store
+            data that is required for inventory management purposes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card security-card">
+    <h2 class="security-section-title">Security Considerations</h2>
+
+    <div class="security-grid security-grid-vertical">
+      <div class="security-info-card">
+        <h3 class="security-card-title">Input Validation</h3>
+        <p class="security-card-text">
+          The system validates user input before saving data. Required fields must be completed, and
+          numerical values such as quantity and price must be valid and non-negative.
+        </p>
+      </div>
+
+      <div class="security-info-card">
+        <h3 class="security-card-title">Unique Item Identification</h3>
+        <p class="security-card-text">
+          The application checks that each item ID is unique. This helps protect data integrity and
+          prevents duplicate inventory records from being created accidentally.
+        </p>
+      </div>
+
+      <div class="security-info-card">
+        <h3 class="security-card-title">Controlled Record Changes</h3>
+        <p class="security-card-text">
+          Update and delete actions are separated into clear workflows. The delete process also includes
+          a confirmation step, which helps reduce accidental data loss.
+        </p>
+      </div>
+    </div>
+  </section>
+</section>

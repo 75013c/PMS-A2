@@ -2,34 +2,44 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!-- Basic document metadata -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Browser tab title -->
   <title>Inventory Management System</title>
+
+  <!-- External stylesheet -->
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
+  <!-- Page header -->
   <div class="header">
     <h1>Inventory Management System</h1>
   </div>
 
+  <!-- Main navigation bar -->
   <nav class="navbar">
     <a href="#" id="navManagement" class="active">Item Management</a>
     <a href="#" id="navSearch">Search Item</a>
     <a href="#" id="navInventory">Display Inventory</a>
   </nav>
 
+  <!-- Main page container -->
   <div class="container">
-    <!-- ========================= -->
-    <!-- MANAGEMENT SECTION -->
-    <!-- ========================= -->
+    <!-- Management section -->
     <section id="managementSection">
+      <!-- Action selection card -->
       <section class="card">
         <h2>Choose an Action</h2>
         <p class="section-note">
           Use the options below to add a new item, update item details, or remove an item from the inventory.
         </p>
 
+        <!-- Action buttons -->
         <div class="action-grid">
           <button type="button" id="showAddPanelBtn" class="action-btn">Add Item</button>
           <button type="button" id="showUpdatePanelBtn" class="action-btn">Edit Item</button>
@@ -37,7 +47,9 @@
         </div>
       </section>
 
+      <!-- Dynamic form card for add / update / delete panels -->
       <section class="card hidden" id="formCard">
+        <!-- Message area for management operations -->
         <div id="managementMessageBox" class="message" aria-live="polite"></div>
 
         <!-- Add Panel -->
@@ -50,6 +62,7 @@
             Each field except "Comment on Item" must have a value.
           </p>
 
+          <!-- Add item form -->
           <form id="addForm">
             <div class="grid">
               <div class="field">
@@ -110,10 +123,11 @@
 
               <div class="field full-width">
                 <label for="addComment">Comment on Item</label>
-                <textarea id="addComment" rows="3" maxlength="200" placeholder="Enter String" ></textarea>
+                <textarea id="addComment" rows="3" maxlength="200" placeholder="Enter String"></textarea>
               </div>
             </div>
 
+            <!-- Add form action buttons -->
             <div class="button-row">
               <button type="button" id="clearAddBtn" class="clear-btn">Clear Form</button>
               <button type="button" id="addBtn" class="add-save-btn">Save Item</button>
@@ -131,6 +145,7 @@
             Then you can modify information in the form below.
           </p>
 
+          <!-- Item lookup box for loading existing item data -->
           <div class="lookup-box">
             <div class="field">
               <label for="loadItemName">Enter Name to Load Item Information *</label>
@@ -142,6 +157,7 @@
             </div>
           </div>
 
+          <!-- Update item form -->
           <form id="updateForm">
             <div class="grid">
               <div class="field">
@@ -206,6 +222,7 @@
               </div>
             </div>
 
+            <!-- Update form action buttons -->
             <div class="button-row">
               <button type="button" id="clearUpdateBtn" class="clear-btn">Clear Form</button>
               <button type="button" id="updateBtn" class="update-save-btn">Update Item</button>
@@ -218,6 +235,7 @@
           <h2>Delete Items from Inventory</h2>
           <p class="section-note">Please enter the item name for deletion.</p>
 
+          <!-- Item lookup box for deletion -->
           <div class="lookup-box">
             <div class="field">
               <label for="deleteItemName">Enter Name to Delete Items from Inventory *</label>
@@ -231,6 +249,7 @@
         </div>
       </section>
 
+      <!-- Delete confirmation dialog -->
       <section id="confirmBox" class="card hidden">
         <h2>Delete Confirmation</h2>
         <div id="confirmText"></div>
@@ -241,13 +260,12 @@
       </section>
     </section>
 
-    <!-- ========================= -->
-    <!-- SEARCH SECTION -->
-    <!-- ========================= -->
+    <!-- Search section -->
     <section id="searchSection" class="hidden">
       <section class="card">
         <h2>Search Item Information</h2>
 
+        <!-- Message area for search operations -->
         <div id="searchMessageBox" class="message" aria-live="polite"></div>
 
         <div class="field">
@@ -255,12 +273,14 @@
           <input type="text" id="searchName" maxlength="60" placeholder="Enter String" />
         </div>
 
+        <!-- Search action buttons -->
         <div class="button-row">
           <button type="button" id="clearSearchBtn" class="clear-btn">Clear</button>
           <button type="button" id="searchBtn" class="add-save-btn">Search</button>
         </div>
       </section>
 
+      <!-- Search result table -->
       <section class="card search-results-card">
         <h2>Search Results</h2>
         <div id="searchResultsInfo" class="results-info"></div>
@@ -285,25 +305,26 @@
       </section>
     </section>
 
-    <!-- ========================= -->
-    <!-- INVENTORY SECTION -->
-    <!-- ========================= -->
+    <!-- Inventory display section -->
     <section id="inventorySection" class="hidden">
       <section class="card">
         <h2>Display Inventory Information</h2>
 
+        <!-- Message area for inventory operations -->
         <div id="inventoryMessageBox" class="message" aria-live="polite"></div>
 
         <div class="field">
           <p class="section-note inventory-note">Click to view all items in database.</p>
         </div>
 
+        <!-- Inventory display action buttons -->
         <div class="button-row">
           <button type="button" id="showPopularBtn" class="clear-btn">Show Popular Items</button>
           <button type="button" id="showAllBtn" class="add-save-btn">Show All Items</button>
         </div>
       </section>
 
+      <!-- Inventory record table -->
       <section class="card search-results-card">
         <h2>Inventory Records</h2>
         <div id="inventoryResultsInfo" class="results-info"></div>
@@ -329,6 +350,8 @@
     </section>
   </div>
 
+  <!-- External JavaScript file -->
   <script src="app.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,74 @@
+<section id="inventorySection" [class.hidden]="currentSection !== 'inventory'">
+  <section class="card">
+    <h2>Display Inventory Information</h2>
+
+    <div
+      id="inventoryMessageBox"
+      class="message"
+      [class.success]="inventoryMessageType === 'success'"
+      [class.error]="inventoryMessageType === 'error'"
+      [class.info]="inventoryMessageType === 'info'"
+      [innerHTML]="inventoryMessage">
+    </div>
+
+    <div class="field">
+      <p class="section-note inventory-note">Click to view all items in database.</p>
+    </div>
+
+    <div class="button-row">
+      <button type="button" id="showPopularBtn" class="clear-btn" (click)="showPopularItemsEvent.emit()">
+        Show Popular Items
+      </button>
+      <button type="button" id="showAllBtn" class="add-save-btn" (click)="showAllItemsEvent.emit()">
+        Show All Items
+      </button>
+    </div>
+  </section>
+
+  <section class="card search-results-card">
+    <h2>Inventory Records</h2>
+    <div id="inventoryResultsInfo" class="results-info">{{ inventoryResultsInfo }}</div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Supplier</th>
+            <th>Stock Status</th>
+            <th>Popular</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (displayedInventoryItems.length === 0) {
+          <tr>
+            <td colspan="9" class="empty-state">No items found.</td>
+          </tr>
+          } @else {
+          @for (item of displayedInventoryItems; track item.itemId) {
+          <tr>
+            <td>{{ item.itemId }}</td>
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.price.toFixed(2) }}</td>
+            <td>{{ item.supplierName }}</td>
+            <td>
+              <span class="badge" [ngClass]="getBadgeClass(item.stockStatus)">
+                {{ item.stockStatus }}
+              </span>
+            </td>
+            <td>{{ item.popularItem }}</td>
+            <td>{{ item.comment || '-' }}</td>
+          </tr>
+          }
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
