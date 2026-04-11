@@ -74,6 +74,17 @@ const defaultInventory: InventoryItem[] = [
     stockStatus: "Low Stock",
     popularItem: "No",
     comment: "Includes battery and charger"
+  },
+  {
+    itemId: "E102",
+    itemName: "iPhone",
+    category: "Electronics",
+    quantity: 34,
+    price: 999.99,
+    supplierName: "Apple",
+    stockStatus: "In Stock",
+    popularItem: "Yes",
+    comment: "The best smartphone"
   }
 ];
 

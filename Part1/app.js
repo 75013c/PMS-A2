@@ -45,6 +45,17 @@ const defaultInventory = [
         stockStatus: "Low Stock",
         popularItem: "No",
         comment: "Includes battery and charger"
+    },
+    {
+        itemId: "E102",
+        itemName: "iPhone",
+        category: "Electronics",
+        quantity: 34,
+        price: 999.99,
+        supplierName: "Apple",
+        stockStatus: "In Stock",
+        popularItem: "Yes",
+        comment: "The best smartphone"
     }
 ];
 function loadInventory() {
@@ -198,7 +209,6 @@ const updateBtn = document.getElementById("updateBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 const clearAddBtn = document.getElementById("clearAddBtn");
 const clearUpdateBtn = document.getElementById("clearUpdateBtn");
-const clearDeleteBtn = document.getElementById("clearDeleteBtn");
 // confirmation
 const confirmBox = document.getElementById("confirmBox");
 const confirmText = document.getElementById("confirmText");
@@ -206,35 +216,50 @@ const confirmYesBtn = document.getElementById("confirmYesBtn");
 const confirmNoBtn = document.getElementById("confirmNoBtn");
 const formCard = document.getElementById("formCard");
 function validateForm(data, isUpdate = false) {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     const errors = [];
-    if (!isUpdate && data.itemId.trim() === "") {
+    const itemId = String((_a = data.itemId) !== null && _a !== void 0 ? _a : "").trim();
+    const itemName = String((_b = data.itemName) !== null && _b !== void 0 ? _b : "").trim();
+    const category = String((_c = data.category) !== null && _c !== void 0 ? _c : "").trim();
+    const quantityValue = String((_d = data.quantity) !== null && _d !== void 0 ? _d : "").trim();
+    const priceValue = String((_e = data.price) !== null && _e !== void 0 ? _e : "").trim();
+    const supplierName = String((_f = data.supplierName) !== null && _f !== void 0 ? _f : "").trim();
+    const stockStatus = String((_g = data.stockStatus) !== null && _g !== void 0 ? _g : "").trim();
+    const popularItem = String((_h = data.popularItem) !== null && _h !== void 0 ? _h : "").trim();
+    if (!isUpdate && itemId === "") {
         errors.push("Item ID is required.");
     }
-    if (data.itemName.trim() === "") {
+    if (itemName === "") {
         errors.push("Item Name is required.");
     }
-    if (data.category.trim() === "") {
+    if (category === "") {
         errors.push("Category is required.");
     }
-    if (data.quantity.trim() === "") {
+    if (quantityValue === "") {
         errors.push("Quantity is required.");
     }
-    else if (Number.isNaN(Number(data.quantity)) || Number(data.quantity) < 0) {
-        errors.push("Quantity must be a number greater than or equal to 0.");
+    else {
+        const quantityNumber = Number(quantityValue);
+        if (!Number.isInteger(quantityNumber) || quantityNumber < 0) {
+            errors.push("Quantity must be a whole number greater than or equal to 0.");
+        }
     }
-    if (data.price.trim() === "") {
+    if (priceValue === "") {
         errors.push("Price is required.");
     }
-    else if (Number.isNaN(Number(data.price)) || Number(data.price) < 0) {
-        errors.push("Price must be a number greater than or equal to 0.");
+    else {
+        const priceNumber = Number(priceValue);
+        if (!Number.isFinite(priceNumber) || priceNumber < 0) {
+            errors.push("Price must be a number greater than or equal to 0.");
+        }
     }
-    if (data.supplierName.trim() === "") {
+    if (supplierName === "") {
         errors.push("Supplier Name is required.");
     }
-    if (data.stockStatus.trim() === "") {
+    if (stockStatus === "") {
         errors.push("Stock Status is required.");
     }
-    if (data.popularItem.trim() === "") {
+    if (popularItem === "") {
         errors.push("Popular Item is required.");
     }
     return errors;
@@ -490,10 +515,6 @@ function initializeManagementSection() {
     });
     clearUpdateBtn === null || clearUpdateBtn === void 0 ? void 0 : clearUpdateBtn.addEventListener("click", () => {
         clearUpdateForm();
-        clearMessage(managementMessageBox);
-    });
-    clearDeleteBtn === null || clearDeleteBtn === void 0 ? void 0 : clearDeleteBtn.addEventListener("click", () => {
-        clearDeleteForm();
         clearMessage(managementMessageBox);
     });
     confirmYesBtn === null || confirmYesBtn === void 0 ? void 0 : confirmYesBtn.addEventListener("click", confirmDelete);
