@@ -1,14 +1,18 @@
+/* Student ID and name */
 /* 24832452 HongyuLiu */
 
+/* Apply border-box sizing and remove default list markers */
 * {
   box-sizing: border-box;
   list-style: none;
 }
 
+/* Always reserve space for the vertical scrollbar */
 html {
   overflow-y: scroll;
 }
 
+/* Basic page styling */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -16,18 +20,21 @@ body {
   color: #1f2937;
 }
 
+/* Main content container */
 .container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 16px 16px 0;
 }
 
+/* Header area */
 .header {
   text-align: center;
   background: #fdfeff;
   padding: 16px;
 }
 
+/* Main page title */
 h1 {
   margin: 0;
   font-size: 30px;
@@ -36,6 +43,7 @@ h1 {
   color: #000;
 }
 
+/* Section title */
 h2 {
   margin-top: 15px;
   text-align: center;
@@ -43,6 +51,7 @@ h2 {
   font-weight: 600;
 }
 
+/* Navigation bar container */
 .navbar {
   width: 100%;
   display: flex;
@@ -56,9 +65,7 @@ h2 {
   margin-bottom: 10px;
 }
 
-
-
-
+/* Navigation links */
 .navbar a {
   color: #ffffff;
   text-decoration: none;
@@ -76,6 +83,7 @@ h2 {
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
 }
 
+/* Navigation link hover effect */
 .navbar a:hover {
   background: #0d3fc7;
   transform: translateY(-1px);
@@ -83,6 +91,7 @@ h2 {
   filter: brightness(1.05);
 }
 
+/* Active navigation link style */
 .navbar a.active {
   background: #0b37af;
   color: #ffffff;
@@ -91,8 +100,7 @@ h2 {
   filter: brightness(1.05);
 }
 
-
-
+/* Generic content card */
 .card {
   background: #ffffff;
   padding: 14px 40px;
@@ -101,28 +109,33 @@ h2 {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.card p{
+/* Paragraphs inside cards */
+.card p {
   text-align: center;
   font-size: 18px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
+/* Two-column grid layout */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
 
+/* Form field container */
 .field {
   display: flex;
   flex-direction: column;
 }
 
+/* Full-width grid item */
 .full-width {
   grid-column: 1 / -1;
 }
 
+/* Form labels */
 label {
   font-weight: 500;
   font-size: 18px;
@@ -130,6 +143,7 @@ label {
   margin: 5px 0 15px;
 }
 
+/* Base font size for form controls and buttons */
 input,
 select,
 textarea,
@@ -137,6 +151,7 @@ button {
   font-size: 15px;
 }
 
+/* Shared input, select, and textarea styling */
 input,
 select,
 textarea {
@@ -148,10 +163,12 @@ textarea {
   background: #fff;
 }
 
+/* Allow textarea vertical resizing only */
 textarea {
   resize: vertical;
 }
 
+/* Button row layout */
 .button-row {
   display: flex;
   justify-content: center;
@@ -160,6 +177,7 @@ textarea {
   margin-top: 14px;
 }
 
+/* Buttons inside a button row */
 .button-row button {
   border: none;
   border-radius: 8px;
@@ -174,10 +192,12 @@ textarea {
   color: white;
 }
 
+/* Clear button style */
 .clear-btn {
   background: #e1ba1d;
 }
 
+/* Add bottom spacing for specific buttons */
 #searchBtn,
 #showPopularBtn,
 #showAllBtn,
@@ -185,6 +205,7 @@ textarea {
   margin-bottom: 10px;
 }
 
+/* Clear button hover effect */
 .clear-btn:hover {
   background: #eab308;
   transform: translateY(-1px);
@@ -192,12 +213,13 @@ textarea {
   filter: brightness(1.05);
 }
 
-
+/* Add/save button style */
 .add-save-btn {
   background: #168c41;
   /* color: #ffffff; */
 }
 
+/* Add/save button hover effect */
 .add-save-btn:hover {
   background: #16a149;
   transform: translateY(-1px);
@@ -205,11 +227,13 @@ textarea {
   filter: brightness(1.05);
 }
 
+/* Update button style */
 .update-save-btn {
   background: #214dac;
   /* color: #ffffff; */
 }
 
+/* Update button hover effect */
 .update-save-btn:hover {
   background: #2a5adf;
   transform: translateY(-1px);
@@ -217,11 +241,13 @@ textarea {
   filter: brightness(1.05);
 }
 
+/* Delete action button style */
 .delete-action-btn {
   background: #ae1c1c;
   /* color: #ffffff; */
 }
 
+/* Delete action button hover effect */
 .delete-action-btn:hover {
   background: #c21b1b;
   transform: translateY(-1px);
@@ -229,11 +255,7 @@ textarea {
   filter: brightness(1.05);
 }
 
-
-
-
-
-
+/* Message box base style */
 .message {
   min-height: 24px;
   margin-bottom: 12px;
@@ -242,24 +264,28 @@ textarea {
   display: none;
 }
 
+/* Success message style */
 .message.success {
   display: block;
   background: #dcfce7;
   color: #166534;
 }
 
+/* Error message style */
 .message.error {
   display: block;
   background: #fee2e2;
   color: #991b1b;
 }
 
+/* Info message style */
 .message.info {
   display: block;
   background: #dbeafe;
   color: #1d4ed8;
 }
 
+/* Text above result tables */
 .results-info {
   text-align: center;
   margin-top: 3px;
@@ -269,16 +295,19 @@ textarea {
   font-size: 17px;
 }
 
+/* Wrapper for horizontally scrollable tables */
 .table-wrapper {
   overflow-x: auto;
 }
 
+/* Table base style */
 table {
   width: 100%;
   border-collapse: collapse;
   /* table-layout: fixed; */
 }
 
+/* Shared table cell styling */
 th,
 td {
   border: 1px solid #e5e7eb;
@@ -287,42 +316,50 @@ td {
   vertical-align: top;
 }
 
+/* Table header background */
 th {
   background: #eff6ff;
 }
 
-
+/* Table header alignment and weight */
 th {
   text-align: center;
   vertical-align: middle;
   font-weight: 600;
 }
 
+/* Table cell alignment */
 td {
   text-align: center;
   vertical-align: middle;
 }
 
+/* Extra bottom padding for result cards */
 .search-results-card {
   padding-bottom: 24px;
 }
 
+/* Hidden element utility */
 .hidden {
   display: none;
 }
 
+/* Panel top spacing */
 .panel {
   margin-top: 8px;
 }
 
+/* Force hidden panel to stay hidden */
 .panel.hidden {
   display: none !important;
 }
 
+/* Utility top gap */
 .top-gap {
   margin-top: 14px;
 }
 
+/* Badge base style */
 .badge {
   display: inline-block;
   padding: 4px 8px;
@@ -331,35 +368,41 @@ td {
   font-weight: 700;
 }
 
+/* Green badge */
 .badge-green {
   background: #dcfce7;
   color: #166534;
 }
 
+/* Yellow badge */
 .badge-yellow {
   background: #fef3c7;
   color: #92400e;
 }
 
+/* Red badge */
 .badge-red {
   background: #fee2e2;
   color: #991b1b;
 }
 
+/* Section helper note text */
 .section-note {
   line-height: 1.1;
   color: #848484;
 }
 
+/* Search note spacing */
 .section-note.search-note {
   margin: 8px 0 25px;
 }
 
+/* Inventory note spacing */
 .section-note.inventory-note {
   margin: 8px 0 12px;
 }
 
-
+/* Action button grid */
 .action-grid {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -368,6 +411,7 @@ td {
   margin-top: 20px;
 }
 
+/* Action button base style */
 .action-btn {
   width: 190px;
   min-height: 60px;
@@ -379,25 +423,29 @@ td {
   color: #ffffff;
   margin: 0 auto 10px;
   cursor: pointer;
-  transition: 
+  transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
     filter 0.22s ease,
     background-color 0.22s ease;
 }
 
+/* Add panel button color */
 #showAddPanelBtn {
   background: #4d8060;
 }
 
+/* Update panel button color */
 #showUpdatePanelBtn {
   background: #465c8b;
 }
 
+/* Delete panel button color */
 #showDeletePanelBtn {
   background: #8e2929;
 }
 
+/* Action button hover: shadow, glow, and slight lift */
 /* hover：阴影 + 浅色光效 + 悬浮 */
 .action-btn:hover {
   transform: translateY(-1px);
@@ -405,6 +453,7 @@ td {
   filter: brightness(1.08);
 }
 
+/* Active state: darker background */
 /* 选中状态：颜色加深 */
 #showAddPanelBtn.active-action {
   background: #14a84a;
@@ -418,6 +467,7 @@ td {
   background: #ca2525;
 }
 
+/* Stronger hover effect for active button */
 /* 选中时 hover 更明显一点 */
 .action-btn.active-action:hover {
   transform: translateY(-3px);
@@ -425,6 +475,7 @@ td {
   filter: brightness(1.12);
 }
 
+/* Lookup box style for load/delete sections */
 .lookup-box {
   text-align: center;
   background: #f0f0f0;
@@ -433,23 +484,27 @@ td {
   border-radius: 10px;
 }
 
+/* Read-only input appearance */
 input[readonly] {
   background: #ededed;
   color: #475569;
 }
 
+/* Specific width for load, delete, and search inputs */
 #loadItemName,
-#deleteItemName, 
+#deleteItemName,
 #searchName {
   width: 60%;
   margin: 0 auto;
   display: block;
 }
 
+/* Extra spacing below search input */
 #searchName {
   margin-bottom: 10px;
 }
 
+/* Delete confirmation box */
 #confirmBox {
   text-align: center;
   background: #f8dfdf;
@@ -460,17 +515,19 @@ input[readonly] {
   margin-bottom: 0;
 }
 
+/* Delete confirmation text spacing */
 #confirmText {
   margin-top: 5px;
   margin-bottom: 25px;
 
 }
 
+/* Top margin for update form */
 #updateForm {
   margin-top: 16px;
 }
 
-
+/* Empty table state text */
 .empty-state {
   text-align: center;
   /* padding: 18px 0; */
@@ -478,6 +535,7 @@ input[readonly] {
   font-weight: 500;
 }
 
+/* Tablet and small-screen layout adjustments */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -500,6 +558,7 @@ input[readonly] {
   }
 }
 
+/* Small mobile screen adjustments */
 @media (max-width: 480px) {
   h1 {
     font-size: 22px;
@@ -512,16 +571,13 @@ input[readonly] {
   }
 }
 
-
-
-
-
+/* Welcome section: light blue glass style */
 /* Welcome 区：浅蓝玻璃风 */
 .home-hero-card {
   position: relative;
   overflow: hidden;
   padding: 22px 40px 40px 40px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.82) 0%, rgba(235,244,255,0.88) 52%, rgba(226,238,255,0.82) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(235, 244, 255, 0.88) 52%, rgba(226, 238, 255, 0.82) 100%);
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 16px;
   box-shadow:
@@ -531,6 +587,7 @@ input[readonly] {
   -webkit-backdrop-filter: blur(10px);
 }
 
+/* Decorative glow in the top-left area */
 .home-hero-card::before {
   content: "";
   position: absolute;
@@ -542,6 +599,7 @@ input[readonly] {
   pointer-events: none;
 }
 
+/* Decorative glow in the bottom-right area */
 .home-hero-card::after {
   content: "";
   position: absolute;
@@ -553,6 +611,7 @@ input[readonly] {
   pointer-events: none;
 }
 
+/* Home section main title */
 .home-title {
   margin-top: 3px;
   margin-bottom: 12px;
@@ -564,6 +623,7 @@ input[readonly] {
   text-shadow: 0 2px 10px rgba(255, 255, 255, 0.45);
 }
 
+/* Home section description text */
 p.home-description {
   margin: 18px auto 20px;
   max-width: 760px;
@@ -573,34 +633,38 @@ p.home-description {
   text-align: center;
 }
 
+/* Information card in the home section */
 .home-info-card {
   position: relative;
-  background: linear-gradient(135deg, rgba(255,255,255,0.72) 0%, rgba(241,247,255,0.82) 100%);
-  border: 1px solid rgba(255,255,255,0.72);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(241, 247, 255, 0.82) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 16px;
   padding: 24px 40px;
   box-shadow:
     0 8px 18px rgba(60, 120, 240, 0.07),
-    inset 0 1px 0 rgba(255,255,255,0.92);
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
+/* Home information card hover effect */
 .home-info-card:hover {
   transform: translateY(-4px);
   box-shadow:
     0 14px 24px rgba(96, 165, 250, 0.12),
-    inset 0 1px 0 rgba(255,255,255,0.96);
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
   border-color: rgba(191, 219, 254, 0.95);
 }
 
+/* Two-column grid for home feature cards */
 .home-feature-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 40px;
 }
 
+/* Home card title */
 .home-card-title {
   margin: 6px 0 20px;
   font-size: 22px;
@@ -609,6 +673,7 @@ p.home-description {
   color: #111827;
 }
 
+/* Home card paragraph text */
 p.home-card-text {
   font-size: 19px;
   line-height: 1.8;
@@ -617,10 +682,12 @@ p.home-card-text {
   margin: 0 0 12px;
 }
 
+/* Remove bottom margin from the last paragraph */
 p.home-card-text:last-child {
   margin-bottom: 0;
 }
 
+/* Current Inventory standalone card effect */
 /* Current Inventory 独立盒子特效 */
 .home-inventory-card {
   padding: 0;
@@ -628,6 +695,7 @@ p.home-card-text:last-child {
   box-shadow: none;
 }
 
+/* Main inventory summary box */
 .home-inventory-box {
   position: relative;
   overflow: hidden;
@@ -640,6 +708,7 @@ p.home-card-text:last-child {
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
+/* Decorative glow on the top-right side */
 .home-inventory-box::before {
   content: "";
   position: absolute;
@@ -651,6 +720,7 @@ p.home-card-text:last-child {
   pointer-events: none;
 }
 
+/* Decorative glow on the bottom-left side */
 .home-inventory-box::after {
   content: "";
   position: absolute;
@@ -662,12 +732,14 @@ p.home-card-text:last-child {
   pointer-events: none;
 }
 
+/* Inventory summary header */
 .home-inventory-header {
   position: relative;
   z-index: 1;
   margin-bottom: 20px;
 }
 
+/* Inventory summary title */
 .home-inventory-title {
   margin: 0 0 8px;
   font-size: 28px;
@@ -676,6 +748,7 @@ p.home-card-text:last-child {
   text-align: center;
 }
 
+/* Inventory summary subtitle */
 .home-inventory-subtitle {
   margin: 0;
   font-size: 16px;
@@ -684,6 +757,7 @@ p.home-card-text:last-child {
   text-align: left;
 }
 
+/* Inventory statistics grid base */
 .home-stats-grid {
   position: relative;
   z-index: 1;
@@ -691,10 +765,12 @@ p.home-card-text:last-child {
   gap: 30px;
 }
 
+/* Three-column layout for inventory statistics */
 .home-stats-grid-wide {
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Inventory statistic card */
 .home-stat-card {
   position: relative;
   overflow: hidden;
@@ -708,14 +784,16 @@ p.home-card-text:last-child {
   transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
 }
 
+/* Gloss overlay for statistic cards */
 .home-stat-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.02) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.02) 100%);
   pointer-events: none;
 }
 
+/* Decorative highlight for statistic cards */
 .home-stat-card::after {
   content: "";
   position: absolute;
@@ -723,10 +801,11 @@ p.home-card-text:last-child {
   left: -24px;
   width: 90px;
   height: 90px;
-  background: radial-gradient(circle, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0) 72%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 72%);
   pointer-events: none;
 }
 
+/* Inventory statistic card hover effect */
 .home-stat-card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow:
@@ -735,18 +814,22 @@ p.home-card-text:last-child {
   filter: brightness(1.03);
 }
 
+/* Category statistic card background */
 .home-stat-card-categories {
   background: linear-gradient(135deg, #f7fbff 0%, #e5f0ff 100%);
 }
 
+/* Record statistic card background */
 .home-stat-card-records {
   background: linear-gradient(135deg, #f4f8ff 0%, #dce9ff 100%);
 }
 
+/* Quantity statistic card background */
 .home-stat-card-quantity {
   background: linear-gradient(135deg, #eef5ff 0%, #d6e5ff 100%);
 }
 
+/* Inventory statistic label */
 p.home-stat-label {
   position: relative;
   z-index: 1;
@@ -757,6 +840,7 @@ p.home-stat-label {
   letter-spacing: 0.2px;
 }
 
+/* Inventory statistic value */
 .home-stat-value {
   position: relative;
   z-index: 1;
@@ -768,6 +852,7 @@ p.home-stat-label {
   text-shadow: 0 3px 12px rgba(30, 79, 216, 0.14);
 }
 
+/* Step-by-step instruction card */
 .home-step-card {
   background: #f9fbff;
   border: 1px solid #e5edf9;
@@ -776,12 +861,14 @@ p.home-stat-label {
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
+/* Three-column steps layout */
 .home-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
+/* Small badge for step labels */
 .home-step-badge {
   display: inline-block;
   margin-bottom: 14px;
@@ -793,6 +880,7 @@ p.home-stat-label {
   font-weight: 700;
 }
 
+/* Home section responsive adjustments for medium screens */
 @media (max-width: 992px) {
   .home-hero {
     grid-template-columns: 1fr;
@@ -811,6 +899,7 @@ p.home-stat-label {
   }
 }
 
+/* Home section responsive adjustments for small screens */
 @media (max-width: 768px) {
   .home-title {
     font-size: 28px;
@@ -834,22 +923,11 @@ p.home-stat-label {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* =========================
    Security Analysis Styles
    ========================= */
 
+/* Security hero card */
 .security-hero-card {
   position: relative;
   overflow: hidden;
@@ -860,6 +938,7 @@ p.home-stat-label {
     inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
 
+/* Decorative glow in the top-right area */
 .security-hero-card::before {
   content: "";
   position: absolute;
@@ -871,6 +950,7 @@ p.home-stat-label {
   pointer-events: none;
 }
 
+/* Decorative glow in the bottom-left area */
 .security-hero-card::after {
   content: "";
   position: absolute;
@@ -882,12 +962,14 @@ p.home-stat-label {
   pointer-events: none;
 }
 
+/* Security hero content wrapper */
 .security-hero-content {
   position: relative;
   z-index: 1;
   padding: 15px 4px 4px;
 }
 
+/* Security page main title */
 .security-main-title {
   margin-top: 0;
   margin-bottom: 14px;
@@ -897,6 +979,7 @@ p.home-stat-label {
   color: #173b8f;
 }
 
+/* Security page introductory text */
 .security-main-text {
   margin: 0 auto;
   max-width: 760px;
@@ -906,6 +989,7 @@ p.home-stat-label {
   color: #55657d;
 }
 
+/* Security content card */
 section.security-card {
   position: relative;
   overflow: hidden;
@@ -917,6 +1001,7 @@ section.security-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
+/* Security section title */
 .security-section-title {
   margin-top: 15px;
   margin-bottom: 30px;
@@ -925,12 +1010,14 @@ section.security-card {
   color: #143b8f;
 }
 
+/* Security card grid */
 .security-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 40px;
 }
 
+/* Security information card */
 .security-info-card {
   position: relative;
   background: linear-gradient(180deg, #fbfdff 0%, #f1f6ff 100%);
@@ -943,6 +1030,7 @@ section.security-card {
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
+/* Security card hover effect */
 .security-info-card:hover {
   transform: translateY(-5px);
   border-color: #d2e1fb;
@@ -951,6 +1039,7 @@ section.security-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
+/* Security card title */
 .security-card-title {
   margin: 0 0 12px;
   text-align: center;
@@ -959,6 +1048,7 @@ section.security-card {
   color: #111827;
 }
 
+/* Security card paragraph text */
 p.security-card-text {
   margin: 30px 0 10px;
   text-align: left;
@@ -967,12 +1057,14 @@ p.security-card-text {
   color: #4b5563;
 }
 
+/* Requirements container */
 .security-requirements {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
+/* Security requirement card */
 .security-requirement-card {
   display: grid;
   grid-template-columns: 88px 1fr;
@@ -988,6 +1080,7 @@ p.security-card-text {
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
+/* Security requirement card hover effect */
 .security-requirement-card:hover {
   transform: translateY(-3px);
   box-shadow:
@@ -995,56 +1088,38 @@ p.security-card-text {
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
-
-
-
-
-
-
-
-
-
+/* Single-column security grid */
 .security-grid-vertical {
   grid-template-columns: 1fr;
 }
 
+/* Two-column security requirements layout */
 .security-requirements-horizontal {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 40px;
 }
 
+/* Remove number column in horizontal requirement cards */
 .security-requirements-horizontal .security-requirement-card {
   grid-template-columns: 1fr;
 }
 
+/* Security section responsive adjustments for medium screens */
 @media (max-width: 992px) {
   .security-requirements-horizontal {
     grid-template-columns: 1fr;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Security grid responsive adjustments for medium screens */
 @media (max-width: 992px) {
   .security-grid {
     grid-template-columns: 1fr;
   }
 }
 
+/* Security section responsive adjustments for small screens */
 @media (max-width: 768px) {
   .security-main-title {
     font-size: 28px;
@@ -1064,20 +1139,11 @@ p.security-card-text {
 
 }
 
-
-
-
-
-
-
-
-
-
-
 /* =========================
    Help Page Styles
    ========================= */
 
+/* Help hero card */
 .help-hero-card {
   position: relative;
   overflow: hidden;
@@ -1088,6 +1154,7 @@ p.security-card-text {
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
+/* Decorative glow in the top-right area */
 .help-hero-card::before {
   content: "";
   position: absolute;
@@ -1099,11 +1166,13 @@ p.security-card-text {
   pointer-events: none;
 }
 
+/* Help hero content wrapper */
 .help-hero-content {
   position: relative;
   z-index: 1;
 }
 
+/* Help page main title */
 .help-main-title {
   margin-top: 14px;
   margin-bottom: 14px;
@@ -1112,6 +1181,7 @@ p.security-card-text {
   color: #183b8c;
 }
 
+/* Help page introductory text */
 .help-main-text {
   margin: 0 auto;
   max-width: 760px;
@@ -1121,6 +1191,7 @@ p.security-card-text {
   color: #55657d;
 }
 
+/* Help content card */
 section.help-card {
   background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
   border: 1px solid #e5edf9;
@@ -1130,6 +1201,7 @@ section.help-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 
+/* Help section title */
 .help-section-title {
   margin-top: 15px;
   margin-bottom: 30px;
@@ -1138,6 +1210,7 @@ section.help-card {
   color: #173b8f;
 }
 
+/* FAQ and troubleshooting grid */
 .help-faq-list,
 .help-trouble-grid {
   display: grid;
@@ -1145,6 +1218,7 @@ section.help-card {
   gap: 40px;
 }
 
+/* FAQ and troubleshooting cards */
 .help-faq-card,
 .help-trouble-card {
   background: linear-gradient(180deg, #fcfdff 0%, #f3f8ff 100%);
@@ -1157,6 +1231,7 @@ section.help-card {
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
+/* FAQ and troubleshooting card hover effect */
 .help-faq-card:hover,
 .help-trouble-card:hover {
   transform: translateY(-4px);
@@ -1165,6 +1240,7 @@ section.help-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
+/* Help card title */
 .help-card-title {
   margin: 8px 0 12px;
   font-size: 22px;
@@ -1173,6 +1249,7 @@ section.help-card {
   text-align: center;
 }
 
+/* Help card text */
 .help-card-text {
   margin: 0;
   font-size: 17px;
@@ -1181,6 +1258,7 @@ section.help-card {
   text-align: left;
 }
 
+/* External links box */
 .help-links-box {
   background: linear-gradient(180deg, #fcfdff 0%, #f4f8ff 100%);
   border: 1px solid #e4ecfb;
@@ -1192,6 +1270,7 @@ section.help-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 
+/* Help text inside the links box */
 .help-links-box .help-card-text {
   font-weight: 500;
   font-size: 20px;
@@ -1199,16 +1278,19 @@ section.help-card {
   margin-bottom: 20px;
 }
 
+/* Help link list */
 .help-link-list {
   margin: 16px 0 0;
   padding-left: 22px;
 }
 
+/* Help link list items */
 .help-link-list li {
   margin-bottom: 15px;
   font-size: 17px;
 }
 
+/* Help links */
 .help-link-list a {
   color: #1d4ed8;
   font-size: 18px;
@@ -1216,17 +1298,21 @@ section.help-card {
   font-weight: 500;
 }
 
+/* Help link hover effect */
 .help-link-list a:hover {
   text-decoration: underline;
 }
 
+/* Help section responsive adjustments for medium screens */
 @media (max-width: 992px) {
+
   .help-faq-list,
   .help-trouble-grid {
     grid-template-columns: 1fr;
   }
 }
 
+/* Help section responsive adjustments for small screens */
 @media (max-width: 768px) {
   .help-main-title {
     font-size: 28px;
@@ -1241,11 +1327,11 @@ section.help-card {
   }
 }
 
-
 /* =========================
    Mobile Responsive Improvement
    ========================= */
 
+/* Improved mobile layout for medium screens */
 @media (max-width: 768px) {
   .container {
     padding: 12px 12px 0;
@@ -1323,6 +1409,7 @@ section.help-card {
   }
 }
 
+/* Improved mobile layout for narrow screens */
 @media (max-width: 480px) {
   h1 {
     font-size: 24px;

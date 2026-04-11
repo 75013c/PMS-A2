@@ -1,11 +1,15 @@
+// 24832452 HongyuLiu
+
 import { Component } from '@angular/core';
 
+// Type definitions for constrained field values
 type Category = 'Electronics' | 'Furniture' | 'Clothing' | 'Tools' | 'Miscellaneous';
 type StockStatus = 'In Stock' | 'Low Stock' | 'Out of Stock';
 type PopularItem = 'Yes' | 'No';
 type MessageType = 'success' | 'error' | 'info' | '';
 type SectionType = 'home' | 'management' | 'search' | 'inventory' | 'security' | 'help';
 
+// Main inventory item data model
 export interface InventoryItem {
   itemId: string;
   itemName: string;
@@ -18,6 +22,7 @@ export interface InventoryItem {
   comment: string;
 }
 
+// Form data model used before conversion to typed inventory items
 export interface FormDataShape {
   itemId: string;
   itemName: string;
@@ -30,13 +35,16 @@ export interface FormDataShape {
   comment: string;
 }
 
+// Root application component
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent {
+  // Session storage key for inventory persistence
   readonly STORAGE_KEY = 'inventory_session_data';
 
+  // Default inventory records loaded when no saved session data exists
   readonly defaultInventory: InventoryItem[] = [
     {
       itemId: 'E101',
@@ -95,41 +103,52 @@ export class AppComponent {
     }
   ];
 
+  // Main application state
   inventory: InventoryItem[] = [];
   displayedInventoryItems: InventoryItem[] = [];
   searchResults: InventoryItem[] = [];
 
+  // Current visible section and current management panel
   currentSection: SectionType = 'home';
   currentPanel: 'add' | 'update' | 'delete' | '' = '';
 
+  // Temporary state for update and delete workflows
   currentEditingItemName = '';
   pendingDeleteName = '';
 
+  // Message state for the management section
   managementMessage = '';
   managementMessageType: MessageType = '';
 
+  // Message and results state for the search section
   searchMessage = '';
   searchMessageType: MessageType = '';
   searchResultsInfo = 'No search performed yet.';
 
+  // Message and results state for the inventory section
   inventoryMessage = '';
   inventoryMessageType: MessageType = '';
   inventoryResultsInfo = '';
 
+  // Search input state
   searchKeyword = '';
 
+  // Form state for add and update operations
   addForm: FormDataShape = this.createEmptyForm();
   updateForm: FormDataShape = this.createEmptyForm();
 
+  // Additional input state for load and delete operations
   loadItemName = '';
   deleteItemName = '';
 
+  // Initialize saved data and default inventory display
   constructor() {
     this.inventory = this.loadInventory();
     this.displayedInventoryItems = [...this.inventory];
     this.inventoryResultsInfo = `Displaying all ${this.inventory.length} item(s).`;
   }
 
+  // Create a blank form object
   createEmptyForm(): FormDataShape {
     return {
       itemId: '',
@@ -144,6 +163,7 @@ export class AppComponent {
     };
   }
 
+  // Load inventory from session storage or initialize with default data
   loadInventory(): InventoryItem[] {
     const saved = sessionStorage.getItem(this.STORAGE_KEY);
 
@@ -155,26 +175,31 @@ export class AppComponent {
     return [...this.defaultInventory];
   }
 
+  // Save current inventory data to session storage
   saveData(): void {
     sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.inventory));
   }
 
+  // Normalize item names for trimmed, case-insensitive comparison
   normalise(name: string): string {
     return name.trim().toLowerCase();
   }
 
+  // Find an inventory item by item name
   findItemByName(name: string): InventoryItem | undefined {
     return this.inventory.find(
       (item: InventoryItem): boolean => this.normalise(item.itemName) === this.normalise(name)
     );
   }
 
+  // Find the index of an inventory item by item name
   findIndexByName(name: string): number {
     return this.inventory.findIndex(
       (item: InventoryItem): boolean => this.normalise(item.itemName) === this.normalise(name)
     );
   }
 
+  // Switch between main application sections
   switchSection(section: SectionType, event?: Event): void {
     event?.preventDefault();
     this.currentSection = section;
@@ -184,11 +209,13 @@ export class AppComponent {
     }
   }
 
+  // Set the currently visible management panel
   setPanel(type: 'add' | 'update' | 'delete'): void {
     this.currentPanel = type;
     this.clearManagementMessage();
   }
 
+  // Validate form data before add or update operations
   validateForm(data: FormDataShape, isUpdate: boolean = false): string[] {
     const errors: string[] = [];
 
@@ -244,6 +271,7 @@ export class AppComponent {
     return errors;
   }
 
+  // Convert form data into a typed inventory item object
   toInventoryItem(data: FormDataShape, existingId?: string): InventoryItem {
     return {
       itemId: existingId ?? data.itemId,
@@ -258,50 +286,60 @@ export class AppComponent {
     };
   }
 
+  // Set a message for the management section
   setManagementMessage(message: string, type: Exclude<MessageType, ''>): void {
     this.managementMessage = message;
     this.managementMessageType = type;
   }
 
+  // Clear the management section message
   clearManagementMessage(): void {
     this.managementMessage = '';
     this.managementMessageType = '';
   }
 
+  // Set a message for the search section
   setSearchMessage(message: string, type: Exclude<MessageType, ''>): void {
     this.searchMessage = message;
     this.searchMessageType = type;
   }
 
+  // Clear the search section message
   clearSearchMessage(): void {
     this.searchMessage = '';
     this.searchMessageType = '';
   }
 
+  // Set a message for the inventory section
   setInventoryMessage(message: string, type: Exclude<MessageType, ''>): void {
     this.inventoryMessage = message;
     this.inventoryMessageType = type;
   }
 
+  // Clear the inventory section message
   clearInventoryMessage(): void {
     this.inventoryMessage = '';
     this.inventoryMessageType = '';
   }
 
+  // Reset the add form
   clearAddForm(): void {
     this.addForm = this.createEmptyForm();
   }
 
+  // Reset the update form and editing state
   clearUpdateForm(): void {
     this.loadItemName = '';
     this.updateForm = this.createEmptyForm();
     this.currentEditingItemName = '';
   }
 
+  // Reset the delete form
   clearDeleteForm(): void {
     this.deleteItemName = '';
   }
 
+  // Add a new item to the inventory
   addItem(): void {
     this.clearManagementMessage();
 
@@ -333,6 +371,7 @@ export class AppComponent {
     }
   }
 
+  // Load an existing item into the update form
   loadItem(): void {
     this.clearManagementMessage();
 
@@ -366,6 +405,7 @@ export class AppComponent {
     this.setManagementMessage(`Item <strong>${item.itemName}</strong> loaded for editing.`, 'info');
   }
 
+  // Update an existing inventory item
   updateItem(): void {
     this.clearManagementMessage();
 
@@ -415,6 +455,7 @@ export class AppComponent {
     }
   }
 
+  // Start the delete workflow by validating the selected item
   requestDelete(): void {
     this.clearManagementMessage();
 
@@ -435,6 +476,7 @@ export class AppComponent {
     this.pendingDeleteName = item.itemName;
   }
 
+  // Confirm and complete the delete operation
   confirmDelete(): void {
     const index = this.findIndexByName(this.pendingDeleteName);
 
@@ -457,10 +499,12 @@ export class AppComponent {
     }
   }
 
+  // Close the delete confirmation state
   closeConfirmation(): void {
     this.pendingDeleteName = '';
   }
 
+  // Search items by item name keyword
   searchItem(): void {
     this.clearSearchMessage();
 
@@ -485,6 +529,7 @@ export class AppComponent {
     }
   }
 
+  // Clear search input and search results
   clearSearch(): void {
     this.searchKeyword = '';
     this.searchResults = [];
@@ -492,12 +537,14 @@ export class AppComponent {
     this.clearSearchMessage();
   }
 
+  // Display all inventory items
   showAllItems(): void {
     this.clearInventoryMessage();
     this.displayedInventoryItems = [...this.inventory];
     this.inventoryResultsInfo = `Displaying all ${this.inventory.length} item(s).`;
   }
 
+  // Display only popular inventory items
   showPopularItems(): void {
     this.clearInventoryMessage();
 
@@ -513,6 +560,7 @@ export class AppComponent {
     }
   }
 
+  // Return badge class name based on stock status
   getBadgeClass(status: StockStatus): string {
     if (status === 'In Stock') {
       return 'badge-green';
@@ -525,14 +573,17 @@ export class AppComponent {
     return 'badge-red';
   }
 
+  // Total number of inventory records
   get totalItemCount(): number {
     return this.inventory.length;
   }
 
+  // Total number of distinct categories
   get totalCategoryCount(): number {
     return new Set(this.inventory.map((item: InventoryItem) => item.category)).size;
   }
 
+  // Total quantity of all items combined
   get totalQuantityCount(): number {
     return this.inventory.reduce((sum: number, item: InventoryItem) => sum + item.quantity, 0);
   }

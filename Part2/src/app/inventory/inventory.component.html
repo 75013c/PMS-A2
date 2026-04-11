@@ -1,7 +1,12 @@
+<!-- 24832452 HongyuLiu -->
+
+<!-- Inventory section wrapper -->
 <section id="inventorySection" [class.hidden]="currentSection !== 'inventory'">
+  <!-- Inventory control card -->
   <section class="card">
     <h2>Display Inventory Information</h2>
 
+    <!-- Message box for inventory-related feedback -->
     <div
       id="inventoryMessageBox"
       class="message"
@@ -11,10 +16,12 @@
       [innerHTML]="inventoryMessage">
     </div>
 
+    <!-- Inventory note -->
     <div class="field">
       <p class="section-note inventory-note">Click to view all items in database.</p>
     </div>
 
+    <!-- Inventory action buttons -->
     <div class="button-row">
       <button type="button" id="showPopularBtn" class="clear-btn" (click)="showPopularItemsEvent.emit()">
         Show Popular Items
@@ -25,6 +32,7 @@
     </div>
   </section>
 
+  <!-- Inventory records table card -->
   <section class="card search-results-card">
     <h2>Inventory Records</h2>
     <div id="inventoryResultsInfo" class="results-info">{{ inventoryResultsInfo }}</div>
@@ -44,11 +52,13 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Empty state when no inventory items are available -->
           @if (displayedInventoryItems.length === 0) {
           <tr>
             <td colspan="9" class="empty-state">No items found.</td>
           </tr>
           } @else {
+          <!-- Loop through and display each inventory item -->
           @for (item of displayedInventoryItems; track item.itemId) {
           <tr>
             <td>{{ item.itemId }}</td>

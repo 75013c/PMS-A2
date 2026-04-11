@@ -1,7 +1,12 @@
+<!-- 24832452 HongyuLiu -->
+
+<!-- Search section wrapper -->
 <section id="searchSection" [class.hidden]="currentSection !== 'search'">
+  <!-- Search control card -->
   <section class="card">
     <h2>Search Item Information</h2>
 
+    <!-- Message box for search-related feedback -->
     <div
       id="searchMessageBox"
       class="message"
@@ -11,6 +16,7 @@
       [innerHTML]="searchMessage">
     </div>
 
+    <!-- Search input area -->
     <div class="field">
       <p class="section-note search-note">Please enter a name to search item information.</p>
       <input
@@ -23,12 +29,14 @@
         placeholder="Enter String" />
     </div>
 
+    <!-- Search action buttons -->
     <div class="button-row">
       <button type="button" id="clearSearchBtn" class="clear-btn" (click)="clearSearchEvent.emit()">Clear</button>
       <button type="button" id="searchBtn" class="add-save-btn" (click)="searchItemEvent.emit()">Search</button>
     </div>
   </section>
 
+  <!-- Search results table card -->
   <section class="card search-results-card">
     <h2>Search Results</h2>
     <div id="searchResultsInfo" class="results-info">{{ searchResultsInfo }}</div>
@@ -48,11 +56,13 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Empty state when no search results are available -->
           @if (searchResults.length === 0) {
           <tr>
             <td colspan="9" class="empty-state">No items found.</td>
           </tr>
           } @else {
+          <!-- Loop through and display each search result -->
           @for (item of searchResults; track item.itemId) {
           <tr>
             <td>{{ item.itemId }}</td>

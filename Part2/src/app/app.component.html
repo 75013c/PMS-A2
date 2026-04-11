@@ -1,7 +1,10 @@
+<!-- 24832452 HongyuLiu -->
+
 <div class="header">
   <h1>Inventory Management System</h1>
 </div>
 
+<!-- Main navigation bar -->
 <nav class="navbar">
   <a href="#" [class.active]="currentSection === 'home'" (click)="switchSection('home', $event)">
     Home
@@ -23,7 +26,9 @@
   </a>
 </nav>
 
+<!-- Main application container -->
 <div class="container">
+  <!-- Home component -->
   <app-home
     [currentSection]="currentSection"
     [totalCategoryCount]="totalCategoryCount"
@@ -31,10 +36,13 @@
     [totalQuantityCount]="totalQuantityCount">
   </app-home>
 
+  <!-- Security analysis component -->
   <app-security-analysis [currentSection]="currentSection"></app-security-analysis>
 
+  <!-- Help component -->
   <app-help [currentSection]="currentSection"></app-help>
 
+  <!-- Item management component -->
   <app-management
     [currentSection]="currentSection"
     [currentPanel]="currentPanel"
@@ -58,6 +66,7 @@
     (confirmDeleteEvent)="confirmDelete()">
   </app-management>
 
+  <!-- Search component -->
   <app-search
     [currentSection]="currentSection"
     [searchMessage]="searchMessage"
@@ -70,6 +79,7 @@
     (searchItemEvent)="searchItem()">
   </app-search>
 
+  <!-- Inventory display component -->
   <app-inventory
     [currentSection]="currentSection"
     [inventoryMessage]="inventoryMessage"

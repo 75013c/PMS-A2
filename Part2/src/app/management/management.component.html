@@ -1,10 +1,15 @@
+<!-- 24832452 HongyuLiu -->
+
+<!-- Management section wrapper -->
 <section id="managementSection" [class.hidden]="currentSection !== 'management'">
+  <!-- Action selection card -->
   <section class="card">
     <h2>Choose an Action</h2>
     <p class="section-note">
       Use the options below to add a new item, update item details, or remove an item from the inventory.
     </p>
 
+    <!-- Action buttons for switching management panels -->
     <div class="action-grid">
       <button type="button" id="showAddPanelBtn" class="action-btn" (click)="setPanelEvent.emit('add')">
         Add Item
@@ -18,7 +23,9 @@
     </div>
   </section>
 
+  <!-- Form card containing add, update, and delete panels -->
   <section class="card" id="formCard" [class.hidden]="currentPanel === ''">
+    <!-- Message box for management-related feedback -->
     <div
       id="managementMessageBox"
       class="message"
@@ -28,6 +35,7 @@
       [innerHTML]="managementMessage">
     </div>
 
+    <!-- Add item panel -->
     <div id="addPanel" class="panel" [class.hidden]="currentPanel !== 'add'">
       <h2>Add New Items to Inventory</h2>
       <p class="section-note">
@@ -37,6 +45,7 @@
         Each field except "Comment on Item" must have a value.
       </p>
 
+      <!-- Add item form -->
       <form id="addForm">
         <div class="grid">
           <div class="field">
@@ -101,6 +110,7 @@
           </div>
         </div>
 
+        <!-- Add form action buttons -->
         <div class="button-row">
           <button type="button" id="clearAddBtn" class="clear-btn" (click)="clearAddFormEvent.emit()">Clear Form</button>
           <button type="button" id="addBtn" class="add-save-btn" (click)="addItemEvent.emit()">Save Item</button>
@@ -108,6 +118,7 @@
       </form>
     </div>
 
+    <!-- Update item panel -->
     <div id="updatePanel" class="panel" [class.hidden]="currentPanel !== 'update'">
       <h2>Edit Item Information</h2>
       <p class="section-note">
@@ -117,6 +128,7 @@
         Then you can modify information in the form below.
       </p>
 
+      <!-- Lookup box for loading an item before update -->
       <div class="lookup-box">
         <div class="field">
           <label for="loadItemName">Enter Name to Load Item Information *</label>
@@ -135,6 +147,7 @@
         </div>
       </div>
 
+      <!-- Update item form -->
       <form id="updateForm">
         <div class="grid">
           <div class="field">
@@ -199,6 +212,7 @@
           </div>
         </div>
 
+        <!-- Update form action buttons -->
         <div class="button-row">
           <button type="button" id="clearUpdateBtn" class="clear-btn" (click)="clearUpdateFormEvent.emit()">
             Clear Form
@@ -210,10 +224,12 @@
       </form>
     </div>
 
+    <!-- Delete item panel -->
     <div id="deletePanel" class="panel" [class.hidden]="currentPanel !== 'delete'">
       <h2>Delete Items from Inventory</h2>
       <p class="section-note">Please enter the item name for deletion.</p>
 
+      <!-- Lookup box for selecting an item to delete -->
       <div class="lookup-box">
         <div class="field">
           <label for="deleteItemName">Enter Name to Delete Items from Inventory *</label>
@@ -236,6 +252,7 @@
     </div>
   </section>
 
+  <!-- Delete confirmation card -->
   <section id="confirmBox" class="card" [class.hidden]="pendingDeleteName === ''">
     <h2>Delete Confirmation</h2>
     <div id="confirmText">
